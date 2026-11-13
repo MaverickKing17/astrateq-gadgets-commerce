@@ -1,62 +1,32 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Sparkles, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 export function ProductFinderCTA() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section ref={ref} className="section-padding bg-gradient-to-br from-slate-grey to-midnight-charcoal relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-electric-cyan/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-electric-cyan/5 rounded-full blur-2xl" />
+    <section className="py-20 bg-slate-grey text-pure-white border-y border-pure-white/10">
+      <div className="container-narrow text-center">
+        <p className="text-electric-cyan text-xs font-semibold uppercase tracking-wider mb-3">
+          Vehicle & Fleet Guidance
+        </p>
+        <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+          Not Sure Which Hardware Fits Your Vehicle?
+        </h2>
+        <p className="text-base sm:text-lg text-pure-white/80 mb-8 max-w-2xl mx-auto">
+          Browse solutions tailored for daily commuting, electric vehicles, family cars, and commercial fleets—or ask our team directly.
+        </p>
 
-      <div className="container-narrow relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          {/* Icon */}
-          <div className="w-20 h-20 mx-auto mb-8 rounded-2xl bg-electric-cyan/20 flex items-center justify-center animate-pulse-glow">
-            <Sparkles className="w-10 h-10 text-electric-cyan" />
-          </div>
-
-          {/* Headline */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-pure-white mb-4">
-            Not Sure Which System You Need?
-          </h2>
-          
-          <p className="text-xl text-pure-white/70 font-body mb-10 max-w-2xl mx-auto">
-            Take our 60-second quiz and get a personalized safety recommendation for your vehicle and driving style
-          </p>
-
-          {/* CTA Button */}
-          <Button variant="hero" size="xl" className="mb-8" asChild>
-            <Link to="/solutions">Find My Perfect Solution</Link>
+        <div className="flex flex-col sm:flex-row justify-center gap-3.5">
+          <Button variant="hero" size="lg" className="min-h-[48px]" asChild>
+            <Link to="/solutions">
+              Explore Solutions
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </Button>
-
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-pure-white/60 text-sm font-body">
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-success" />
-              No email required
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-success" />
-              Instant results
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-success" />
-              Free
-            </span>
-          </div>
-        </motion.div>
+          <Button variant="hero-ghost" size="lg" className="min-h-[48px]" asChild>
+            <Link to="/contact">Ask About Compatibility</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

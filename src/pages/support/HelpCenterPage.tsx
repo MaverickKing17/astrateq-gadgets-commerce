@@ -1,91 +1,140 @@
+import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search, Book, MessageCircle, Phone, Mail, ChevronRight } from "lucide-react";
+import { Search, MessageCircle, Phone, Mail, ChevronDown } from "lucide-react";
+import { storeConfig } from "@/config/store";
 
-const categories = [
-  { title: "Getting Started", description: "Installation guides and setup tutorials", icon: Book, articles: 12 },
-  { title: "Troubleshooting", description: "Common issues and solutions", icon: MessageCircle, articles: 24 },
-  { title: "Account & Billing", description: "Manage your subscription and payments", icon: Mail, articles: 8 },
-  { title: "Product Guides", description: "Detailed feature documentation", icon: Book, articles: 18 },
-];
-
-const popularArticles = [
-  "How to install Driver Coach AI",
-  "Connecting your device to the mobile app",
-  "Understanding your safety score",
-  "Troubleshooting connection issues",
-  "Updating firmware on your device",
+const faqs = [
+  {
+    category: "Compatibility",
+    question: "How do I confirm if a unit works with my vehicle?",
+    answer:
+      "Send your vehicle make, model, and year via our Contact page or email support@astrateq.com prior to ordering so we can verify connector and cabin fitment.",
+  },
+  {
+    category: "Installation",
+    question: "Does installation require permanent wiring changes?",
+    answer:
+      "Our windshield-mounted and OBD-II hardware options are designed to connect cleanly without modifying factory wiring. Step-by-step guidance is available on our Installation Guide page.",
+  },
+  {
+    category: "Orders & Checkout",
+    question: "Why doesn't the cart charge my card online?",
+    answer:
+      "Online payment processing is currently separated from the storefront until payment integration is activated. Checkout prepares an inquiry summary for manual confirmation.",
+  },
+  {
+    category: "Shipping & Returns",
+    question: "Where can I review shipping and return terms?",
+    answer:
+      "Carrier options, delivery timelines, and return procedures are detailed in our Shipping Policy and Refund Policy pages.",
+  },
+  {
+    category: "Warranty",
+    question: "How are hardware warranty terms provided?",
+    answer:
+      "Written warranty and support terms for each hardware unit are confirmed with you before an order is accepted.",
+  },
 ];
 
 export default function HelpCenterPage() {
+  const [query, setQuery] = useState("");
+  const filteredFaqs = faqs.filter((item) =>
+    `${item.category} ${item.question} ${item.answer}`
+      .toLowerCase()
+      .includes(query.trim().toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-5xl">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Help Center</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              Find answers to your questions and get the support you need.
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Customer Support
             </p>
-            
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              Help Center
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+              Search common questions about vehicle compatibility, installation, shipping, and orders.
+            </p>
+
             <div className="max-w-xl mx-auto relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
-                type="text"
-                placeholder="Search for help articles..."
-                className="w-full pl-12 pr-4 py-4 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-electric-cyan transition-colors"
+                type="search"
+                aria-label="Search help topics"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search help topics..."
+                className="w-full h-12 pl-12 pr-4 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
               />
             </div>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {categories.map((category) => (
-              <div key={category.title} className="p-6 bg-card rounded-xl border border-border hover:border-electric-cyan/50 transition-colors cursor-pointer group">
-                <category.icon className="w-10 h-10 text-electric-cyan mb-4" />
-                <h3 className="font-heading font-semibold text-lg mb-2">{category.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4">{category.description}</p>
-                <span className="text-electric-cyan text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                  {category.articles} articles <ChevronRight className="w-4 h-4" />
-                </span>
-              </div>
-            ))}
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12">
+
+          <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
             <div>
-              <h2 className="text-2xl font-heading font-bold mb-6">Popular Articles</h2>
-              <div className="space-y-3">
-                {popularArticles.map((article) => (
-                  <div key={article} className="p-4 bg-card rounded-lg border border-border hover:border-electric-cyan/50 transition-colors cursor-pointer flex items-center justify-between">
-                    <span>{article}</span>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                ))}
-              </div>
+              <h2 className="text-xl font-heading font-semibold mb-4">
+                Frequently Asked Questions
+              </h2>
+              {filteredFaqs.length === 0 ? (
+                <div className="p-8 bg-card rounded-xl border border-border text-center">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    No matching help topics found for "{query}".
+                  </p>
+                  <Button variant="outline" onClick={() => setQuery("")}>
+                    Reset Search
+                  </Button>
+                </div>
+              ) : (
+                <div className="divide-y divide-border border-y border-border">
+                  {filteredFaqs.map((item) => (
+                    <details key={item.question} className="py-4 group">
+                      <summary className="font-medium cursor-pointer flex items-center justify-between gap-4 list-none">
+                        <span>
+                          <span className="text-xs text-primary uppercase tracking-wider block mb-1">
+                            {item.category}
+                          </span>
+                          {item.question}
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                        {item.answer}
+                      </p>
+                    </details>
+                  ))}
+                </div>
+              )}
             </div>
-            
-            <div className="bg-card rounded-xl border border-border p-8">
-              <h2 className="text-2xl font-heading font-bold mb-4">Still need help?</h2>
-              <p className="text-muted-foreground mb-6">
-                Our support team is here to assist you with any questions or issues.
+
+            <div className="bg-card rounded-xl border border-border p-6">
+              <h2 className="text-xl font-heading font-semibold mb-3">
+                Still Need Assistance?
+              </h2>
+              <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
+                Reach our team during {storeConfig.support.hours}.
               </p>
               <div className="space-y-4">
-                <Button variant="hero" className="w-full" asChild>
+                <Button variant="hero" className="w-full min-h-[44px]" asChild>
                   <Link to="/contact">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Contact Support
                   </Link>
                 </Button>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" /> 1-800-ASTRATEQ
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" /> support@astrateq.com
-                  </span>
+                <div className="space-y-2 text-xs text-muted-foreground pt-2 border-t border-border">
+                  <p className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-primary" />
+                    {storeConfig.support.phone}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-primary" />
+                    {storeConfig.support.email}
+                  </p>
                 </div>
               </div>
             </div>

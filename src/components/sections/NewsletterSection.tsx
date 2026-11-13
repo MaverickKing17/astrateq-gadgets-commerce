@@ -1,75 +1,137 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Mail, Check } from "lucide-react";
+import { useState } from "react";
+import { Mail, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { storeConfig } from "@/config/store";
 
 export function NewsletterSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    type: "idle" | "error" | "unconfigured" | "success";
+    message?: string;
+  }>({ type: "idle" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      toast({
-        title: "Successfully subscribed!",
-        description: "You'll receive our next newsletter in your inbox.",
+    if (isSubmitting) return;
+
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setFeedback({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
+      return;
+    }
+
+    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT;
+    if (!endpoint) {
+      setFeedback({
+        type: "unconfigured",
+        message: `Automated newsletter signup is not yet connected in this environment. You can contact ${storeConfig.support.email} for product release updates.`,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      if (!response.ok) {
+        throw new Error("Subscription failed");
+      }
+      setFeedback({
+        type: "success",
+        message: "You're subscribed for product release and hardware updates.",
       });
       setEmail("");
+    } catch {
+      setFeedback({
+        type: "error",
+        message: `We could not process your request right now. Please try again or email ${storeConfig.support.email}.`,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <section ref={ref} className="section-padding data-mesh-light relative overflow-hidden">
-      <div className="container-narrow">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center"
+    <section className="py-20 bg-grey-100 text-foreground border-t border-border">
+      <div className="container-narrow text-center">
+        <div className="w-12 h-12 mx-auto mb-5 rounded-lg bg-midnight-charcoal flex items-center justify-center">
+          <Mail className="w-6 h-6 text-electric-cyan" />
+        </div>
+
+        <h2 className="text-3xl font-heading font-bold mb-3">
+          Product Updates & Availability Notices
+        </h2>
+        <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-sm sm:text-base">
+          Receive product release updates, compatibility expansions, and hardware announcements.
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4"
+          noValidate
         >
-          {/* Icon */}
-          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-electric-cyan/10 flex items-center justify-center">
-            <Mail className="w-8 h-8 text-electric-cyan" />
+          <label htmlFor="newsletter-email" className="sr-only">
+            Email address
+          </label>
+          <Input
+            id="newsletter-email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (feedback.type !== "idle") setFeedback({ type: "idle" });
+            }}
+            className="flex-1 h-12 bg-pure-white border-grey-200 text-midnight-charcoal"
+            required
+          />
+          <Button
+            type="submit"
+            variant="hero"
+            size="lg"
+            className="h-12 min-w-[130px]"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Sending..." : "Subscribe"}
+          </Button>
+        </form>
+
+        {feedback.type !== "idle" && feedback.message && (
+          <div
+            role="status"
+            className={`max-w-md mx-auto mb-4 rounded-lg border px-4 py-3 text-left text-xs flex items-start gap-2 ${
+              feedback.type === "success"
+                ? "bg-success/10 border-success/30 text-foreground"
+                : feedback.type === "error"
+                ? "bg-destructive/10 border-destructive/30 text-destructive"
+                : "bg-card border-border text-muted-foreground"
+            }`}
+          >
+            {feedback.type === "success" ? (
+              <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            )}
+            <span>{feedback.message}</span>
           </div>
+        )}
 
-          {/* Headline */}
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-            Stay Ahead of the Curve
-          </h2>
-          
-          <p className="text-muted-foreground font-body mb-8 max-w-xl mx-auto">
-            Get exclusive AI safety insights, early access to new features, and expert tips delivered monthly
-          </p>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-6">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 h-12 bg-pure-white border-grey-200 focus:border-electric-cyan focus:ring-electric-cyan"
-              required
-            />
-            <Button type="submit" variant="hero" size="lg">
-              Subscribe
-            </Button>
-          </form>
-
-          {/* Trust Note */}
-          <p className="text-xs text-muted-foreground font-body flex items-center justify-center gap-2">
-            <Check className="w-4 h-4 text-success" />
-            No spam. Unsubscribe anytime.{" "}
-            <Link to="/legal/privacy" className="text-electric-cyan hover:underline">
-              Privacy Policy
-            </Link>
-          </p>
-        </motion.div>
+        <p className="text-xs text-muted-foreground">
+          Review how we handle personal data in our{" "}
+          <Link to="/legal/privacy" className="text-midnight-charcoal font-medium underline">
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

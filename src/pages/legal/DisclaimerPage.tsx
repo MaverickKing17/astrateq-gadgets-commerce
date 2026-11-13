@@ -1,38 +1,39 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AlertTriangle } from "lucide-react";
+import { storeConfig } from "@/config/store";
 
 export default function DisclaimerPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
+      <main className="pt-32 md:pt-40 pb-20">
         <div className="container-wide max-w-4xl">
           <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="w-8 h-8 text-electric-cyan" />
-            <h1 className="text-4xl md:text-5xl font-heading font-bold gradient-text-light">Legal Disclaimer</h1>
+            <AlertTriangle className="w-8 h-8 text-primary" />
+            <h1 className="text-4xl md:text-5xl font-heading font-bold">Legal Disclaimer</h1>
           </div>
-          <p className="text-muted-foreground mb-8 text-sm">Last updated: March 1, 2026</p>
+          <p className="text-muted-foreground mb-8 text-sm">Last updated: March 2026</p>
 
           <div className="bg-warning/10 border border-warning/30 rounded-xl p-6 mb-8 flex items-start gap-4">
             <AlertTriangle className="w-6 h-6 text-warning flex-shrink-0 mt-1" />
-            <p className="text-foreground">
+            <p className="text-foreground text-sm sm:text-base">
               <strong>Important:</strong> Please read this disclaimer carefully. By using our products, you acknowledge that you have read, understood, and agree to the terms below. This disclaimer is governed by the laws of the Province of Ontario and the federal laws of Canada.
             </p>
           </div>
 
-          <div className="prose prose-lg max-w-none text-foreground space-y-8">
+          <div className="space-y-8 text-foreground text-sm sm:text-base leading-relaxed">
             <section>
-              <h2 className="text-2xl font-heading font-semibold mb-4">1. Nature of Products</h2>
+              <h2 className="text-xl font-heading font-semibold mb-3">1. Nature of Products</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Astrateq Gadgets Inc. (legally headquartered in Carson City, Nevada, USA) designs AI-powered automotive safety products as <strong>supplementary decision-support tools</strong>. They are NOT intended to replace professional vehicle inspections, manufacturer-recommended maintenance schedules, safe and attentive driving practices, licensed mechanic diagnoses, or human judgment in any driving or vehicle maintenance situation.
+                Astrateq Gadgets Inc. (legally headquartered in Carson City, Nevada, USA) designs automotive hardware as <strong>supplementary decision-support tools</strong>. They are NOT intended to replace professional vehicle inspections, manufacturer-recommended maintenance schedules, safe and attentive driving practices, licensed mechanic diagnoses, or human judgment in any driving or vehicle maintenance situation.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-heading font-semibold mb-4">2. AI Prediction Accuracy</h2>
+              <h2 className="text-xl font-heading font-semibold mb-3">2. Diagnostic & Monitoring Limitations</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Our AI systems achieve approximately <strong>96.2% accuracy</strong> as of Q1 2026. This means approximately 3.8% of predictions may be inaccurate. Accuracy varies by vehicle make, model, age, and driving conditions. Environmental factors may affect sensor readings. <strong>Users should always verify AI recommendations with certified automotive professionals.</strong>
+                Telemetry and driving feedback are informational estimates that vary by vehicle make, model, age, sensor installation, and driving conditions. <strong>Users should always verify diagnostic alerts and vehicle maintenance decisions with certified automotive professionals.</strong>
               </p>
             </section>
 
@@ -74,10 +75,10 @@ export default function DisclaimerPage() {
             <section>
               <h2 className="text-2xl font-heading font-semibold mb-4">8. Contact</h2>
               <div className="text-muted-foreground leading-relaxed space-y-2">
-                <p><strong>Email:</strong> legal@astrateq.com</p>
-                <p><strong>Phone:</strong> 1-888-ASTRATEQ (1-888-278-7283)</p>
-                <p><strong>Marketing Office:</strong> 100 King Street West, Toronto, ON M5X 1A9, Canada</p>
-                <p><strong>Legal Headquarters:</strong> Astrateq Gadgets Inc., Carson City, Nevada, USA</p>
+                <p><strong>Email:</strong> {storeConfig.support.legalEmail}</p>
+                <p><strong>Phone:</strong> {storeConfig.support.phone}</p>
+                <p><strong>Marketing Office:</strong> {storeConfig.address.office}</p>
+                <p><strong>Legal Headquarters:</strong> {storeConfig.legalName}, {storeConfig.address.headquarters}</p>
               </div>
             </section>
           </div>

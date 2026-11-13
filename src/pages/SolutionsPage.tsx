@@ -8,71 +8,101 @@ const solutions = [
   {
     icon: Car,
     title: "For Daily Drivers",
-    description: "AI-powered safety for your everyday commute. Get predictive maintenance alerts and emergency response systems.",
+    description:
+      "Compact cabin hardware focused on driving feedback and trip visibility for everyday commuting.",
     href: "/solutions/daily-drivers",
-    features: ["Driver Coach AI", "Emergency Response System", "Complete Safety Bundles"],
+    features: [
+      "ASTRA-AI Driver Coach System",
+      "Windshield-mounted hardware",
+      "Vehicle compatibility guidance",
+    ],
   },
   {
     icon: Battery,
     title: "For EV Owners",
-    description: "Maximize your electric vehicle's potential with intelligent battery management and charging optimization.",
+    description:
+      "Dedicated battery health and charging telemetry hardware tailored for electric vehicles.",
     href: "/solutions/ev-owners",
-    features: ["EV Battery Intelligence", "Charging Protection Suite", "Range Optimization AI"],
+    features: [
+      "EV Battery Intelligence Suite",
+      "Charging behavior visibility",
+      "EV model fitment check",
+    ],
   },
   {
     icon: Users,
     title: "For Families",
-    description: "Protect what matters most with family-focused safety features and teen driver monitoring.",
+    description:
+      "Practical driving awareness tools for shared household vehicles and newer drivers.",
     href: "/solutions/families",
-    features: ["Family Safety Systems", "Teen Driver Monitoring", "Multi-Vehicle Coverage"],
+    features: [
+      "Driver Coach hardware",
+      "Multi-driver cabin suitability",
+      "Pre-order support",
+    ],
   },
   {
     icon: Building2,
     title: "For Businesses",
-    description: "Enterprise-grade fleet intelligence with predictive maintenance and volume pricing.",
+    description:
+      "OBD-II fleet telematics and maintenance planning hardware for commercial vehicle operators.",
     href: "/solutions/businesses",
-    features: ["Fleet Intelligence Platform", "Predictive Maintenance", "Volume Pricing"],
+    features: [
+      "FleetGuard AI Pro",
+      "Maintenance planning visibility",
+      "Fleet inquiry support",
+    ],
   },
 ];
 
 export default function SolutionsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
+      <main className="pt-32 md:pt-40 pb-20">
         <div className="container-wide">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6 gradient-text">
-              Find Your Perfect Solution
+          <div className="text-center mb-14">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Solutions By Driver Type
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-5">
+              Find Your Vehicle Solution
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Whether you're a daily commuter, EV enthusiast, or fleet manager, we have the right AI-powered safety solution for you.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Compare how our automotive hardware maps to personal commuting, electric vehicles, family cars, and commercial fleets.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {solutions.map((solution) => (
               <div
                 key={solution.title}
-                className="bg-card rounded-2xl p-8 border border-border hover:border-electric-cyan/50 transition-all duration-300 group"
+                className="bg-card rounded-xl p-8 border border-border hover:border-primary/50 transition-colors flex flex-col"
               >
-                <div className="w-14 h-14 rounded-xl bg-electric-cyan/10 flex items-center justify-center mb-6 group-hover:bg-electric-cyan/20 transition-colors">
-                  <solution.icon className="w-7 h-7 text-electric-cyan" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5">
+                  <solution.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h2 className="text-2xl font-heading font-semibold mb-3">{solution.title}</h2>
-                <p className="text-muted-foreground mb-6">{solution.description}</p>
-                <ul className="space-y-2 mb-6">
+                <h2 className="text-2xl font-heading font-semibold mb-3">
+                  {solution.title}
+                </h2>
+                <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                  {solution.description}
+                </p>
+                <ul className="space-y-2 mb-6 flex-1">
                   {solution.features.map((feature) => (
-                    <li key={feature} className="text-sm text-muted-foreground flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-electric-cyan" />
+                    <li
+                      key={feature}
+                      className="text-sm text-foreground/85 flex items-center gap-2.5"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                       {feature}
                     </li>
                   ))}
                 </ul>
-                <Button variant="hero" asChild className="group/btn">
+                <Button variant="hero" asChild className="self-start min-h-[44px]">
                   <Link to={solution.href}>
-                    Learn More
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    Explore Option
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </div>

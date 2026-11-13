@@ -2,99 +2,110 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, CheckCircle, Download, Wrench, Smartphone, Video } from "lucide-react";
+import { ArrowLeft, Wrench, ShieldCheck } from "lucide-react";
+import { storeConfig } from "@/config/store";
 
 const steps = [
   {
-    number: 1,
-    title: "Unbox Your Device",
-    description: "Carefully remove your Astrateq device from the packaging. Verify all components are included: device, power cable, mounting bracket, and quick start guide."
+    number: "01",
+    title: "Inspect Package Contents",
+    description:
+      "Verify the hardware unit, mounting accessories or connector cable, and printed setup documentation included with your shipment.",
   },
   {
-    number: 2,
-    title: "Download the App",
-    description: "Download the Astrateq app from the App Store or Google Play. Create an account or sign in to your existing account."
+    number: "02",
+    title: "Confirm Port & Mounting Position",
+    description:
+      "Locate your vehicle's OBD-II diagnostic port or confirm an unobstructed windshield mounting area near the rearview mirror.",
   },
   {
-    number: 3,
-    title: "Mount the Device",
-    description: "Using the included mounting bracket, attach the device to your windshield or dashboard according to the included diagram."
+    number: "03",
+    title: "Secure & Connect",
+    description:
+      "Attach the mount or seat the diagnostic connector firmly while the vehicle ignition is turned off.",
   },
   {
-    number: 4,
-    title: "Connect Power",
-    description: "Connect the power cable to your vehicle's OBD-II port or 12V power outlet, depending on your product model."
-  },
-  {
-    number: 5,
-    title: "Pair with App",
-    description: "Open the Astrateq app and follow the on-screen instructions to pair your device via Bluetooth."
-  },
-  {
-    number: 6,
-    title: "Complete Setup",
-    description: "Configure your preferences, set up driver profiles, and you're ready to go!"
+    number: "04",
+    title: "Verify Operation",
+    description:
+      "Power on the vehicle and confirm the unit indicator light and companion setup steps match your included guide.",
   },
 ];
 
 export default function InstallationPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
-          <Link to="/support/help-center" className="inline-flex items-center gap-2 text-muted-foreground hover:text-electric-cyan mb-8 transition-colors">
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-4xl">
+          <Link
+            to="/support/help-center"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Help Center
           </Link>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Installation Guide</h1>
-              <p className="text-xl text-muted-foreground">
-                Get your Astrateq device up and running in minutes.
+
+          <div className="mb-12">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Setup Overview
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              Installation Guide
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              General installation checklist for Astrateq driving, EV, and OBD-II hardware.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-10">
+            <div className="p-6 bg-card rounded-xl border border-border">
+              <Wrench className="w-6 h-6 text-primary mb-3" />
+              <h2 className="font-semibold mb-1">Non-Invasive Fitment</h2>
+              <p className="text-sm text-muted-foreground">
+                Designed to install without cutting or splicing factory vehicle wiring.
               </p>
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              <div className="p-6 bg-card rounded-xl border border-border text-center">
-                <Download className="w-10 h-10 text-electric-cyan mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Download App</h3>
-                <p className="text-sm text-muted-foreground">iOS & Android</p>
-              </div>
-              <div className="p-6 bg-card rounded-xl border border-border text-center">
-                <Wrench className="w-10 h-10 text-electric-cyan mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Easy Install</h3>
-                <p className="text-sm text-muted-foreground">10-minute setup</p>
-              </div>
-              <div className="p-6 bg-card rounded-xl border border-border text-center">
-                <Video className="w-10 h-10 text-electric-cyan mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Video Guides</h3>
-                <p className="text-sm text-muted-foreground">Step-by-step</p>
-              </div>
+            <div className="p-6 bg-card rounded-xl border border-border">
+              <ShieldCheck className="w-6 h-6 text-primary mb-3" />
+              <h2 className="font-semibold mb-1">Pre-Install Verification</h2>
+              <p className="text-sm text-muted-foreground">
+                Confirm specific vehicle port layout with our support team anytime before mounting.
+              </p>
             </div>
-            
-            <div className="space-y-6">
-              {steps.map((step) => (
-                <div key={step.number} className="flex gap-6 p-6 bg-card rounded-xl border border-border">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-electric-cyan/20 flex items-center justify-center text-electric-cyan font-bold text-xl">
-                    {step.number}
-                  </div>
-                  <div>
-                    <h3 className="font-heading font-semibold text-lg mb-2">{step.title}</h3>
-                    <p className="text-muted-foreground">{step.description}</p>
-                  </div>
+          </div>
+
+          <div className="space-y-4 mb-12">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className="flex gap-5 p-6 bg-card rounded-xl border border-border items-start"
+              >
+                <span className="text-sm font-mono font-bold text-primary pt-1 tabular-nums">
+                  {step.number}
+                </span>
+                <div>
+                  <h2 className="font-heading font-semibold text-lg mb-1.5">
+                    {step.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
-              ))}
-            </div>
-            
-            <div className="mt-12 p-8 bg-electric-cyan/10 rounded-xl border border-electric-cyan/30 text-center">
-              <h3 className="font-heading font-bold text-xl mb-2">Need Help?</h3>
-              <p className="text-muted-foreground mb-4">Our support team is available 24/7 to assist with installation.</p>
-              <Button variant="hero" asChild>
-                <Link to="/contact">Contact Support</Link>
-              </Button>
-            </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="p-8 bg-card rounded-xl border border-border text-center">
+            <h2 className="font-heading font-bold text-xl mb-2">
+              Need Installation Assistance?
+            </h2>
+            <p className="text-muted-foreground text-sm mb-5">
+              Our support team is available {storeConfig.support.hours}.
+            </p>
+            <Button variant="hero" asChild className="min-h-[44px]">
+              <Link to="/contact">Contact Support</Link>
+            </Button>
           </div>
         </div>
       </main>

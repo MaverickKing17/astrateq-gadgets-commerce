@@ -3,62 +3,92 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { storeConfig } from "@/config/store";
 
-const timeline = [
-  { year: "2019", title: "The Beginning", description: "Astrateq was founded by Dr. Sarah Chen and Marcus Williams in a small garage in Silicon Valley." },
-  { year: "2020", title: "First Product Launch", description: "Driver Coach AI launched, receiving immediate recognition for its innovative approach to driver safety." },
-  { year: "2021", title: "Series A Funding", description: "Raised $15M in Series A funding led by Andreessen Horowitz to expand our product line." },
-  { year: "2022", title: "Enterprise Expansion", description: "Launched Predictive Fleet for enterprise customers, securing contracts with major logistics companies." },
-  { year: "2023", title: "Global Growth", description: "Expanded operations to Europe and Asia, surpassing 50,000 active users worldwide." },
-  { year: "2024", title: "EV Innovation", description: "Launched EV Battery Intelligence, entering the electric vehicle market with battery health monitoring." },
-  { year: "2025", title: "The Future", description: "Continuing to innovate with Web3 integration, NFT warranties, and next-gen AI capabilities." },
+const milestones = [
+  {
+    phase: "01",
+    title: "Practical In-Cabin Hardware",
+    description:
+      "We focused on compact, unobtrusive hardware—starting with windshield-mounted driving monitors designed to integrate cleanly into everyday passenger cabins.",
+  },
+  {
+    phase: "02",
+    title: "EV & Diagnostic Visibility",
+    description:
+      "As electric vehicle adoption grew, we expanded our catalogue to cover dedicated battery health and charging telemetry hardware tailored for EV owners.",
+  },
+  {
+    phase: "03",
+    title: "Commercial Fleet Readiness",
+    description:
+      "We introduced rugged OBD-II telematics options built for service vehicles and small-to-midsize fleets seeking centralized maintenance planning.",
+  },
+  {
+    phase: "04",
+    title: "Transparent Direct Retail",
+    description:
+      "Today we operate with a commitment to factual specifications, direct compatibility verification, and honest storefront readiness before online payment activation.",
+  },
 ];
 
 export default function OurStoryPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
-          <Link to="/company/about-us" className="inline-flex items-center gap-2 text-muted-foreground hover:text-electric-cyan mb-8 transition-colors">
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-4xl">
+          <Link
+            to="/company/about-us"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to About Us
           </Link>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">Our Story</h1>
-              <p className="text-xl text-muted-foreground">
-                From a garage startup to a global leader in automotive AI safety.
-              </p>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border" />
-              <div className="space-y-12">
-                {timeline.map((event, index) => (
-                  <div key={event.year} className="relative pl-20">
-                    <div className="absolute left-0 w-16 h-16 rounded-full bg-electric-cyan/20 border-4 border-background flex items-center justify-center">
-                      <span className="text-electric-cyan font-bold text-sm">{event.year}</span>
-                    </div>
-                    <div className="bg-card rounded-xl border border-border p-6">
-                      <h3 className="text-xl font-heading font-bold mb-2">{event.title}</h3>
-                      <p className="text-muted-foreground">{event.description}</p>
-                    </div>
-                  </div>
-                ))}
+
+          <div className="mb-14">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Company Focus
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              Our Story
+            </h1>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              How {storeConfig.brandName} shapes a focused catalogue of automotive monitoring and diagnostic hardware.
+            </p>
+          </div>
+
+          <div className="space-y-6 mb-16">
+            {milestones.map((item) => (
+              <div
+                key={item.phase}
+                className="bg-card rounded-xl border border-border p-6 sm:p-8 flex gap-5 items-start"
+              >
+                <span className="text-sm font-mono font-bold text-primary shrink-0 pt-1 tabular-nums">
+                  {item.phase}
+                </span>
+                <div>
+                  <h2 className="text-xl font-heading font-semibold mb-2">
+                    {item.title}
+                  </h2>
+                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-            </div>
-            
-            <div className="mt-16 text-center">
-              <h2 className="text-2xl font-heading font-bold mb-4">Be Part of Our Story</h2>
-              <p className="text-muted-foreground mb-6">
-                Join thousands of drivers who trust Astrateq to keep them safe on the road.
-              </p>
-              <Button variant="hero" asChild>
-                <Link to="/products">Explore Our Products</Link>
-              </Button>
-            </div>
+            ))}
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-8 text-center">
+            <h2 className="text-2xl font-heading font-bold mb-3">
+              Explore the Current Collection
+            </h2>
+            <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+              View our driving, EV, and commercial fleet hardware options.
+            </p>
+            <Button variant="hero" asChild className="min-h-[44px]">
+              <Link to="/products">Browse Products</Link>
+            </Button>
           </div>
         </div>
       </main>

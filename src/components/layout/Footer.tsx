@@ -1,20 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Linkedin, Twitter, Instagram, Youtube, Lock, Shield, Check, Bitcoin, Send } from "lucide-react";
+import {
+  Linkedin,
+  Twitter,
+  Instagram,
+  Youtube,
+  Lock,
+  Shield,
+  Send,
+  AlertCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/astrateq-logo.webp";
+import { storeConfig } from "@/config/store";
 
 const footerLinks = {
   products: [
     { label: "Driver Coach", href: "/products/driver-coach" },
-    { label: "Emergency AI", href: "/products/emergency-ai" },
     { label: "Predictive Fleet", href: "/products/predictive-fleet" },
     { label: "EV Suite", href: "/products/ev-suite" },
-    { label: "View All", href: "/products" },
+    { label: "Emergency AI Preview", href: "/products/emergency-ai" },
+    { label: "Shop All", href: "/products" },
   ],
   support: [
     { label: "Help Center", href: "/support/help-center" },
-    { label: "Installation", href: "/support/installation" },
+    { label: "Installation Guide", href: "/support/installation" },
     { label: "Warranty", href: "/support/warranty" },
     { label: "Returns", href: "/support/returns" },
     { label: "Contact", href: "/contact" },
@@ -22,7 +31,7 @@ const footerLinks = {
   company: [
     { label: "About Us", href: "/company/about-us" },
     { label: "Our Story", href: "/company/our-story" },
-    { label: "Trust & Certifications", href: "/company/trust-certs" },
+    { label: "Security & Practices", href: "/company/trust-certs" },
     { label: "Careers", href: "/company/careers" },
     { label: "Press Kit", href: "/company/press-kit" },
     { label: "Blog", href: "/blog" },
@@ -33,51 +42,86 @@ const legalLinks = [
   { label: "Privacy Policy", href: "/legal/privacy" },
   { label: "Terms of Service", href: "/legal/terms" },
   { label: "Cookie Policy", href: "/legal/cookie" },
-  { label: "DMCA", href: "/legal/dmca" },
-  { label: "Disclaimer", href: "/legal/disclaimer" },
-  { label: "Accessibility", href: "/legal/accessibility" },
   { label: "Shipping", href: "/legal/shipping" },
   { label: "Refund Policy", href: "/legal/refund" },
+  { label: "Accessibility", href: "/legal/accessibility" },
+  { label: "Disclaimer", href: "/legal/disclaimer" },
+  { label: "DMCA", href: "/legal/dmca" },
 ];
 
-const socialLinks = [
-  { icon: Linkedin, href: "https://linkedin.com/company/astrateq", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com/astrateq", label: "Twitter" },
-  { icon: Instagram, href: "https://instagram.com/astrateq", label: "Instagram" },
-  { icon: Youtube, href: "https://youtube.com/@astrateq", label: "YouTube" },
-];
-
-const paymentMethods = ["Visa", "Mastercard", "Amex", "Discover", "PayPal", "Apple Pay", "Google Pay", "Affirm"];
+const socialIcons: Record<string, typeof Linkedin> = {
+  LinkedIn: Linkedin,
+  Twitter: Twitter,
+  Instagram: Instagram,
+  YouTube: Youtube,
+};
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<{
+    type: "idle" | "error" | "unconfigured" | "success";
+    message?: string;
+  }>({ type: "idle" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter signup
-    console.log("Newsletter signup:", email);
-    setEmail("");
+    if (isSubmitting) return;
+
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setStatus({ type: "error", message: "Please enter a valid email address." });
+      return;
+    }
+
+    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT;
+    if (!endpoint) {
+      setStatus({
+        type: "unconfigured",
+        message: `Email list signup is not configured yet. Please email ${storeConfig.support.email} for updates.`,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      if (!response.ok) {
+        throw new Error("Subscription request failed");
+      }
+      setStatus({
+        type: "success",
+        message: "Subscribed. You'll receive updates at your inbox.",
+      });
+      setEmail("");
+    } catch {
+      setStatus({
+        type: "error",
+        message: `Unable to subscribe right now. Please contact ${storeConfig.support.email}.`,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <footer className="cyber-grid-dark text-pure-white relative overflow-hidden">
-      {/* Subtle gradient overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-electric-cyan/5 pointer-events-none" />
-      
-      {/* Main Footer - 3 Column Layout matching wireframe */}
-      <div className="container-wide section-padding relative z-10">
+    <footer className="bg-midnight-charcoal text-pure-white border-t border-slate-grey/70">
+      <div className="container-wide py-16 lg:py-20">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Column 1: Products */}
           <div>
-            <h3 className="font-heading font-semibold text-sm uppercase tracking-wider mb-4 text-electric-cyan">
+            <h3 className="font-heading font-semibold text-xs uppercase tracking-wider mb-4 text-electric-cyan">
               Products
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {footerLinks.products.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-pure-white hover:text-electric-cyan text-sm font-body transition-colors"
+                    className="text-pure-white/80 hover:text-electric-cyan text-sm font-body transition-colors inline-block py-0.5"
                   >
                     {link.label}
                   </Link>
@@ -86,17 +130,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 2: Support */}
           <div>
-            <h3 className="font-heading font-semibold text-sm uppercase tracking-wider mb-4 text-electric-cyan">
+            <h3 className="font-heading font-semibold text-xs uppercase tracking-wider mb-4 text-electric-cyan">
               Support
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-pure-white hover:text-electric-cyan text-sm font-body transition-colors"
+                    className="text-pure-white/80 hover:text-electric-cyan text-sm font-body transition-colors inline-block py-0.5"
                   >
                     {link.label}
                   </Link>
@@ -105,17 +148,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Company */}
           <div>
-            <h3 className="font-heading font-semibold text-sm uppercase tracking-wider mb-4 text-electric-cyan">
+            <h3 className="font-heading font-semibold text-xs uppercase tracking-wider mb-4 text-electric-cyan">
               Company
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-pure-white hover:text-electric-cyan text-sm font-body transition-colors"
+                    className="text-pure-white/80 hover:text-electric-cyan text-sm font-body transition-colors inline-block py-0.5"
                   >
                     {link.label}
                   </Link>
@@ -124,111 +166,115 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Connect & Trust */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
-            <h3 className="font-heading font-semibold text-sm uppercase tracking-wider mb-4 text-electric-cyan">
+            <h3 className="font-heading font-semibold text-xs uppercase tracking-wider mb-4 text-electric-cyan">
               Connect
             </h3>
-            
-            {/* Social Links */}
+
             <div className="flex gap-3 mb-6">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-slate-grey flex items-center justify-center text-electric-cyan hover:bg-electric-cyan hover:text-midnight-charcoal transition-all duration-300"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+              {storeConfig.social.map((social) => {
+                const Icon = socialIcons[social.label] ?? Linkedin;
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-lg bg-slate-grey flex items-center justify-center text-electric-cyan hover:bg-electric-cyan hover:text-midnight-charcoal transition-colors"
+                    aria-label={social.label}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </a>
+                );
+              })}
             </div>
 
-            {/* Newsletter Signup */}
-            <form onSubmit={handleNewsletterSubmit} className="mb-6">
-              <label className="text-sm text-pure-white block mb-2">Stay Updated</label>
+            <form onSubmit={handleNewsletterSubmit} className="mb-5" noValidate>
+              <label htmlFor="footer-newsletter-email" className="text-sm text-pure-white block mb-2">
+                Product Updates
+              </label>
               <div className="flex gap-2">
                 <input
+                  id="footer-newsletter-email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 bg-slate-grey border border-slate-grey/50 rounded-lg text-sm text-pure-white placeholder:text-pure-white/40 focus:outline-none focus:border-electric-cyan transition-colors"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status.type !== "idle") setStatus({ type: "idle" });
+                  }}
+                  placeholder="Enter your email"
+                  className="min-w-0 flex-1 px-3 py-2.5 bg-slate-grey border border-pure-white/15 rounded-lg text-sm text-pure-white placeholder:text-pure-white/45 focus:outline-none focus:border-electric-cyan transition-colors"
                   required
                 />
-                <Button type="submit" variant="hero" size="sm" className="px-3">
+                <Button
+                  type="submit"
+                  variant="hero"
+                  size="sm"
+                  className="px-3.5 h-auto min-h-[40px]"
+                  disabled={isSubmitting}
+                  aria-label="Subscribe for updates"
+                >
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
+              {status.type !== "idle" && status.message && (
+                <p
+                  role="status"
+                  className={`mt-2 text-xs flex items-start gap-1.5 ${
+                    status.type === "success"
+                      ? "text-success"
+                      : status.type === "error"
+                      ? "text-destructive"
+                      : "text-pure-white/75"
+                  }`}
+                >
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                  <span>{status.message}</span>
+                </p>
+              )}
             </form>
 
-            {/* Trust Badges */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs text-pure-white">
+            <div className="space-y-1.5 text-xs text-pure-white/75">
+              <p>{storeConfig.support.email}</p>
+              <p>{storeConfig.support.phone}</p>
+              <p>{storeConfig.address.office}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-grey/70">
+        <div className="container-wide py-5">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-pure-white/75">
+            <div className="flex flex-wrap items-center gap-6">
+              <span className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-electric-cyan" />
-                <span>SSL Secured</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-pure-white">
+                Encrypted Connection (HTTPS)
+              </span>
+              <span className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-electric-cyan" />
-                <span>Privacy Protected</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-pure-white">
-                <Bitcoin className="w-4 h-4 text-electric-cyan" />
-                <span>Crypto Accepted (ETH/SOL/USDC)</span>
-              </div>
+                PIPEDA-Aligned Privacy Practices
+              </span>
             </div>
+            <p className="text-pure-white/65">
+              Online checkout is currently in preparation — contact our team for availability and order support.
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Security & Payments */}
-      <div className="border-t border-slate-grey">
-        <div className="container-wide py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Security Badges */}
-            <div className="flex items-center gap-6 text-sm text-pure-white font-body">
-              <span className="flex items-center gap-2">
-                <Lock className="w-4 h-4" />
-                SSL Secure
-              </span>
-              <span className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                Privacy Protected
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="w-4 h-4" />
-                Money-Back
-              </span>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="flex items-center gap-2 text-xs text-pure-white font-body">
-              {paymentMethods.map((method) => (
-                <span
-                  key={method}
-                  className="px-2 py-1 bg-slate-grey rounded text-pure-white"
-                >
-                  {method}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Copyright */}
-      <div className="border-t border-slate-grey">
-        <div className="container-wide py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-pure-white font-body">
-            <p>© 2026 Astrateq Gadgets Inc. All rights reserved. Legally headquartered in Carson City, Nevada, USA.</p>
-            <div className="flex items-center gap-4">
+      <div className="border-t border-slate-grey/70">
+        <div className="container-wide py-5">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs text-pure-white/70 font-body">
+            <p>
+              © {new Date().getFullYear()} {storeConfig.legalName} All rights reserved. Headquartered in {storeConfig.address.headquarters}.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               {legalLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="hover:text-electric-cyan transition-colors"
+                  className="hover:text-electric-cyan transition-colors py-0.5"
                 >
                   {link.label}
                 </Link>

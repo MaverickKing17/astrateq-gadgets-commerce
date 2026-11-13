@@ -95,7 +95,9 @@ async function streamChat({
         const parsed = JSON.parse(jsonStr);
         const content = parsed.choices?.[0]?.delta?.content as string | undefined;
         if (content) onDelta(content);
-      } catch {}
+      } catch {
+        // Ignore trailing partial SSE fragments on stream close
+      }
     }
   }
 
@@ -218,7 +220,7 @@ export function AstraBotChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.25 }}
-            className="fixed bottom-6 right-6 z-[60] w-[380px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-4rem)] rounded-2xl overflow-hidden shadow-2xl border border-border flex flex-col bg-card"
+            className="dark fixed bottom-6 right-6 z-[60] w-[380px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-4rem)] rounded-2xl overflow-hidden shadow-2xl border border-border flex flex-col bg-card text-foreground"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-safety-ember to-safety-ember-hover px-4 py-3 flex items-center justify-between shrink-0">
@@ -231,12 +233,13 @@ export function AstraBotChat() {
                     Astra Concierge
                   </h3>
                   <p className="text-[10px] text-midnight-charcoal/70 leading-tight">
-                    AI Technical Advisor • Online
+                    Product Support • Online
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
+                aria-label="Close chat"
                 className="p-1.5 rounded-lg hover:bg-midnight-charcoal/10 text-midnight-charcoal transition-colors"
               >
                 <X className="w-4 h-4" />

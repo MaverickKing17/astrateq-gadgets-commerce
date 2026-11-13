@@ -2,64 +2,84 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Check, X } from "lucide-react";
-
-const features = [
-  { name: "Real-time AI Coaching", driverCoach: true, fleetGuard: true, evSuite: false },
-  { name: "Predictive Maintenance", driverCoach: true, fleetGuard: true, evSuite: true },
-  { name: "Emergency Response", driverCoach: true, fleetGuard: true, evSuite: false },
-  { name: "Battery Health Monitoring", driverCoach: false, fleetGuard: false, evSuite: true },
-  { name: "Charging Optimization", driverCoach: false, fleetGuard: false, evSuite: true },
-  { name: "Fleet Management", driverCoach: false, fleetGuard: true, evSuite: false },
-  { name: "Driver Safety Scoring", driverCoach: true, fleetGuard: true, evSuite: false },
-  { name: "Multi-Vehicle Support", driverCoach: false, fleetGuard: true, evSuite: true },
-];
+import { products, formatPrice } from "@/lib/catalogue";
 
 export default function ComparePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
+      <main className="pt-32 md:pt-40 pb-20">
         <div className="container-wide">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6 gradient-text">Compare Products</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Find the perfect Astrateq product for your needs.
+          <div className="text-center mb-14">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Side-By-Side Overview
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              Compare Astrateq Hardware
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Compare pricing, category, primary use case, and compatibility guidance across our active product catalogue.
             </p>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-4xl mx-auto">
+          <div className="overflow-x-auto rounded-xl border border-border bg-card">
+            <table className="w-full min-w-[680px] text-left">
               <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left p-4 font-heading font-semibold">Feature</th>
-                  <th className="p-4 font-heading font-semibold text-center">Driver Coach AI</th>
-                  <th className="p-4 font-heading font-semibold text-center">Fleet Guard Pro</th>
-                  <th className="p-4 font-heading font-semibold text-center">EV Suite</th>
+                <tr className="border-b border-border bg-midnight-charcoal">
+                  <th className="p-4 text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                    Attribute
+                  </th>
+                  {products.map((product) => (
+                    <th key={product.id} className="p-4 font-heading font-semibold text-base">
+                      {product.name}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody>
-                {features.map((feature) => (
-                  <tr key={feature.name} className="border-b border-border">
-                    <td className="p-4 text-muted-foreground">{feature.name}</td>
-                    <td className="p-4 text-center">{feature.driverCoach ? <Check className="w-5 h-5 text-success mx-auto" /> : <X className="w-5 h-5 text-muted-foreground/30 mx-auto" />}</td>
-                    <td className="p-4 text-center">{feature.fleetGuard ? <Check className="w-5 h-5 text-success mx-auto" /> : <X className="w-5 h-5 text-muted-foreground/30 mx-auto" />}</td>
-                    <td className="p-4 text-center">{feature.evSuite ? <Check className="w-5 h-5 text-success mx-auto" /> : <X className="w-5 h-5 text-muted-foreground/30 mx-auto" />}</td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-border text-sm">
+                <tr>
+                  <td className="p-4 font-medium text-muted-foreground">Price</td>
+                  {products.map((product) => (
+                    <td key={product.id} className="p-4 font-semibold tabular-nums">
+                      {formatPrice(product.price)} {product.currency}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-muted-foreground">Category</td>
+                  {products.map((product) => (
+                    <td key={product.id} className="p-4 text-primary">
+                      {product.category}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-muted-foreground">Primary Audience</td>
+                  {products.map((product) => (
+                    <td key={product.id} className="p-4 capitalize">
+                      {product.audience === "fleet" ? "Commercial Fleets" : "Personal & Family Vehicles"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-muted-foreground">Compatibility</td>
+                  {products.map((product) => (
+                    <td key={product.id} className="p-4 text-muted-foreground leading-relaxed">
+                      {product.compatibilityNote}
+                    </td>
+                  ))}
+                </tr>
               </tbody>
               <tfoot>
-                <tr>
+                <tr className="border-t border-border">
                   <td className="p-4"></td>
-                  <td className="p-4 text-center">
-                    <Button variant="hero" size="sm" asChild><Link to="/products/driver-coach">View</Link></Button>
-                  </td>
-                  <td className="p-4 text-center">
-                    <Button variant="hero" size="sm" asChild><Link to="/products/predictive-fleet">View</Link></Button>
-                  </td>
-                  <td className="p-4 text-center">
-                    <Button variant="hero" size="sm" asChild><Link to="/products/ev-suite">View</Link></Button>
-                  </td>
+                  {products.map((product) => (
+                    <td key={product.id} className="p-4">
+                      <Button variant="hero" size="sm" asChild className="min-h-[40px]">
+                        <Link to={product.link}>View Details</Link>
+                      </Button>
+                    </td>
+                  ))}
                 </tr>
               </tfoot>
             </table>

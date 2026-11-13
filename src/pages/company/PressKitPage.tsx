@@ -1,78 +1,75 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Download, Image, FileText, Mail } from "lucide-react";
+import { storeConfig } from "@/config/store";
 import logo from "@/assets/astrateq-logo.webp";
 
 export default function PressKitPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">Press Kit</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Resources for media and press coverage of Astrateq.
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-4xl">
+          <div className="text-center mb-14">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Media & Brand Resources
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              Press Kit
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Brand overview and media contact details for {storeConfig.brandName}.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            <div className="p-8 bg-card rounded-xl border border-border text-center">
-              <Image className="w-12 h-12 text-electric-cyan mx-auto mb-4" />
-              <h3 className="text-xl font-heading font-bold mb-2">Logo Package</h3>
-              <p className="text-muted-foreground text-sm mb-4">PNG, SVG, and EPS formats in various sizes</p>
-              <Button variant="outline" className="w-full">
-                <Download className="w-4 h-4 mr-2" />
-                Download Logos
-              </Button>
-            </div>
-            
-            <div className="p-8 bg-card rounded-xl border border-border text-center">
-              <Image className="w-12 h-12 text-electric-cyan mx-auto mb-4" />
-              <h3 className="text-xl font-heading font-bold mb-2">Product Images</h3>
-              <p className="text-muted-foreground text-sm mb-4">High-resolution product photography</p>
-              <Button variant="outline" className="w-full">
-                <Download className="w-4 h-4 mr-2" />
-                Download Images
-              </Button>
-            </div>
-            
-            <div className="p-8 bg-card rounded-xl border border-border text-center">
-              <FileText className="w-12 h-12 text-electric-cyan mx-auto mb-4" />
-              <h3 className="text-xl font-heading font-bold mb-2">Fact Sheet</h3>
-              <p className="text-muted-foreground text-sm mb-4">Company overview, stats, and key facts</p>
-              <Button variant="outline" className="w-full">
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Button>
-            </div>
-          </div>
-          
-          <div className="bg-card rounded-2xl border border-border p-12 mb-12">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          <div className="bg-card rounded-xl border border-border p-8 sm:p-10 mb-10">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-2xl font-heading font-bold mb-4">About Astrateq</h2>
-                <p className="text-muted-foreground mb-4">
-                  Astrateq is a leading automotive technology company specializing in AI-powered safety and predictive maintenance solutions. Founded in 2019, the company has grown to serve over 50,000 users across 30+ countries.
+                <h2 className="text-2xl font-heading font-bold mb-4">
+                  About {storeConfig.brandName}
+                </h2>
+                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-4">
+                  {storeConfig.legalName} offers connected automotive hardware across three core categories: driving monitoring (ASTRA-AI Driver Coach System), EV battery telemetry (EV Battery Intelligence Suite), and commercial OBD-II fleet telematics (FleetGuard AI Pro).
                 </p>
-                <p className="text-muted-foreground">
-                  Our flagship products—Driver Coach AI, Emergency AI, EV Battery Intelligence, and Predictive Fleet—leverage machine learning to make roads safer and reduce vehicle maintenance costs.
+                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+                  Principal marketing operations are located at {storeConfig.address.office}, with legal headquarters in {storeConfig.address.headquarters}.
                 </p>
               </div>
-              <div className="bg-midnight-charcoal rounded-xl p-8 flex items-center justify-center">
-                <img src={logo} alt="Astrateq Logo" className="max-w-[200px]" />
+              <div className="bg-midnight-charcoal rounded-xl border border-border p-8 flex flex-col items-center justify-center gap-4">
+                <img
+                  src={logo}
+                  alt={`${storeConfig.brandName} official logo`}
+                  className="max-w-[200px] h-auto"
+                />
+                <a
+                  href={logo}
+                  download="astrateq-logo.webp"
+                  className="text-xs text-primary hover:underline"
+                >
+                  Download Brand Logo (.webp)
+                </a>
               </div>
             </div>
           </div>
-          
-          <div className="bg-electric-cyan/10 rounded-xl border border-electric-cyan/30 p-8 text-center">
-            <Mail className="w-12 h-12 text-electric-cyan mx-auto mb-4" />
-            <h2 className="text-2xl font-heading font-bold mb-2">Media Inquiries</h2>
-            <p className="text-muted-foreground mb-4">For press inquiries, please contact our media relations team.</p>
-            <a href="mailto:press@astrateq.com" className="text-electric-cyan hover:underline text-lg">
-              press@astrateq.com
-            </a>
+
+          <div className="rounded-xl border border-border bg-card p-8 text-center">
+            <Mail className="w-10 h-10 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-heading font-bold mb-2">
+              Media & Asset Requests
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base mb-6 max-w-lg mx-auto">
+              Need high-resolution product photos, fact sheets, or an interview? Reach out to our media contact directly.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button variant="hero" asChild className="min-h-[44px]">
+                <a href="mailto:press@astrateq.com">Email press@astrateq.com</a>
+              </Button>
+              <Button variant="outline" asChild className="min-h-[44px]">
+                <Link to="/contact">General Contact Form</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </main>

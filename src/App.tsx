@@ -94,7 +94,6 @@ function AnimatedRoutes() {
           
           {/* Resource Pages */}
           <Route path="/resources/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/resources/how-it-works" element={<HowItWorksPage />} />
           <Route path="/resources/compare" element={<ComparePage />} />
           
           {/* Support Pages */}

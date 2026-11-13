@@ -15,10 +15,13 @@ function loadTrackingScripts() {
     document.head.appendChild(gaScript);
 
     gaScript.onload = () => {
-      const w = window as any;
+      const w = window as Window & {
+        dataLayer?: unknown[];
+        gtag?: (...args: unknown[]) => void;
+      };
       w.dataLayer = w.dataLayer || [];
       function gtag(...args: unknown[]) {
-        w.dataLayer.push(args);
+        w.dataLayer?.push(args);
       }
       gtag("js", new Date());
       gtag("config", "G-12QTQ8HMGN");

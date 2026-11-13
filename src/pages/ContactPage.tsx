@@ -1,139 +1,260 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { trackGenerateLead } from "@/lib/analytics";
+import { storeConfig } from "@/config/store";
 
 export default function ContactPage() {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{
+    type: "idle" | "error" | "unconfigured" | "success";
+    message?: string;
+  }>({ type: "idle" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    trackGenerateLead();
-    toast({
-      title: "Message Sent",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    if (isSubmitting) return;
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const subject = formData.subject.trim();
+    const message = formData.message.trim();
+
+    if (!name || !subject || !message) {
+      setStatus({ type: "error", message: "Please complete all required fields." });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus({ type: "error", message: "Please enter a valid email address." });
+      return;
+    }
+
+    const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT;
+    if (!endpoint) {
+      setStatus({
+        type: "unconfigured",
+        message: `Automated form delivery is not configured in this environment. Use the "Open Email Draft" button below or email ${storeConfig.support.email} directly.`,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+      if (!response.ok) {
+        throw new Error("Contact submission failed");
+      }
+      trackGenerateLead();
+      setStatus({
+        type: "success",
+        message: "Thank you. Your message has been sent to our support team.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setStatus({
+        type: "error",
+        message: `Could not submit the form right now. Please email ${storeConfig.support.email} directly.`,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  const mailtoHref = `mailto:${storeConfig.support.email}?subject=${encodeURIComponent(
+    formData.subject || "Astrateq Support Inquiry"
+  )}&body=${encodeURIComponent(
+    `Name: ${formData.name || ""}\nReply Email: ${formData.email || ""}\n\n${formData.message || ""}`
+  )}`;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
+      <main className="pt-32 md:pt-40 pb-20">
         <div className="container-wide">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6 gradient-text-light">
+          <div className="text-center mb-14">
+            <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              Customer Support & Compatibility
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
               Contact Us
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Have questions? We're here to help. Reach out and our team will respond within 24 hours.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Questions about vehicle fitment, fleet pricing, shipping, or returns? Reach out to our team directly.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-card rounded-2xl p-8 border border-border">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            <div className="bg-card rounded-xl p-6 sm:p-8 border border-border">
               <h2 className="text-2xl font-heading font-semibold mb-6">Send us a message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Name</label>
+                    <label htmlFor="contact-name" className="block text-sm font-medium mb-2">
+                      Name
+                    </label>
                     <input
+                      id="contact-name"
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:border-electric-cyan transition-colors"
+                      className="w-full h-11 px-4 bg-background border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <label htmlFor="contact-email" className="block text-sm font-medium mb-2">
+                      Email
+                    </label>
                     <input
+                      id="contact-email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:border-electric-cyan transition-colors"
+                      className="w-full h-11 px-4 bg-background border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Subject</label>
+                  <label htmlFor="contact-subject" className="block text-sm font-medium mb-2">
+                    Subject
+                  </label>
                   <input
+                    id="contact-subject"
                     type="text"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:border-electric-cyan transition-colors"
+                    className="w-full h-11 px-4 bg-background border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Message</label>
+                  <label htmlFor="contact-message" className="block text-sm font-medium mb-2">
+                    Message
+                  </label>
                   <textarea
+                    id="contact-message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={5}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:border-electric-cyan transition-colors resize-none"
+                    className="w-full p-4 bg-background border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors resize-none"
                     required
                   />
                 </div>
-                <Button type="submit" variant="hero" size="lg" className="w-full">
-                  <Send className="w-4 h-4 mr-2" />
-                  Send Message
-                </Button>
+
+                {status.type !== "idle" && status.message && (
+                  <div
+                    role="status"
+                    className={`rounded-lg border p-3.5 text-xs flex items-start gap-2.5 ${
+                      status.type === "success"
+                        ? "bg-success/10 border-success/30 text-foreground"
+                        : status.type === "error"
+                        ? "bg-destructive/10 border-destructive/30 text-destructive"
+                        : "bg-background border-border text-muted-foreground"
+                    }`}
+                  >
+                    {status.type === "success" ? (
+                      <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    )}
+                    <span>{status.message}</span>
+                  </div>
+                )}
+
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="lg"
+                    className="min-h-[44px] flex-1"
+                    disabled={isSubmitting}
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </Button>
+                  <Button type="button" variant="outline" size="lg" className="min-h-[44px]" asChild>
+                    <a href={mailtoHref}>Open Email Draft</a>
+                  </Button>
+                </div>
               </form>
             </div>
 
-            {/* Contact Info */}
-            <div className="space-y-8">
-              <div className="bg-card rounded-2xl p-8 border border-border">
-                <h2 className="text-2xl font-heading font-semibold mb-6">Get in Touch</h2>
-                <div className="space-y-6">
+            <div className="space-y-6">
+              <div className="bg-card rounded-xl p-6 sm:p-8 border border-border">
+                <h2 className="text-2xl font-heading font-semibold mb-6">Direct Contact Details</h2>
+                <div className="space-y-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-electric-cyan/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-electric-cyan" />
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Mail className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-1">Email</h3>
-                      <p className="text-muted-foreground">support@astrateq.com</p>
+                      <h3 className="font-semibold text-sm mb-1">Email</h3>
+                      <a
+                        href={`mailto:${storeConfig.support.email}`}
+                        className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                      >
+                        {storeConfig.support.email}
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-electric-cyan/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-electric-cyan" />
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Phone className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-1">Phone</h3>
-                      <p className="text-muted-foreground">1-800-ASTRATEQ</p>
+                      <h3 className="font-semibold text-sm mb-1">Phone</h3>
+                      <p className="text-muted-foreground text-sm">{storeConfig.support.phone}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-electric-cyan/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-electric-cyan" />
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Clock className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-1">Headquarters</h3>
-                      <p className="text-muted-foreground">100 King Street West<br />Toronto, ON M5X 1A9, Canada</p>
+                      <h3 className="font-semibold text-sm mb-1">Support Hours</h3>
+                      <p className="text-muted-foreground text-sm">{storeConfig.support.hours}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm mb-1">Marketing Office</h3>
+                      <p className="text-muted-foreground text-sm">{storeConfig.address.office}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-electric-cyan/10 rounded-2xl p-8 border border-electric-cyan/20">
-                <h3 className="text-xl font-heading font-semibold mb-3">Need Immediate Help?</h3>
-                <p className="text-muted-foreground mb-4">
-                  Our AI support assistant is available 24/7 to answer your questions instantly.
+              <div className="bg-card rounded-xl p-6 sm:p-8 border border-border">
+                <h3 className="text-lg font-heading font-semibold mb-2">Looking for Self-Service Answers?</h3>
+                <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
+                  Review our installation guides, shipping schedule, and return policy before reaching out.
                 </p>
-                <Button variant="hero">Chat with AI Support</Button>
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="outline" className="min-h-[40px]" asChild>
+                    <Link to="/support/help-center">Help Center</Link>
+                  </Button>
+                  <Button variant="outline" className="min-h-[40px]" asChild>
+                    <Link to="/support/installation">Installation Guide</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

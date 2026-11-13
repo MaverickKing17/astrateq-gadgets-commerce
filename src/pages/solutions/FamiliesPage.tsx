@@ -4,49 +4,66 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Users, ArrowRight } from "lucide-react";
 
-const products = [
-  { name: "Family Safety Systems", description: "Comprehensive safety monitoring for the whole family's vehicles.", href: "/products/driver-coach" },
-  { name: "Teen Driver Monitoring", description: "Real-time monitoring and coaching for new drivers in your family.", href: "/products/driver-coach" },
-  { name: "Multi-Vehicle Coverage", description: "Protect all family vehicles with a single affordable plan.", href: "/products" },
+const items = [
+  {
+    name: "ASTRA-AI Driver Coach System",
+    description:
+      "In-vehicle coaching and trip awareness designed for shared household cars and newer drivers.",
+    href: "/products/driver-coach",
+  },
+  {
+    name: "Emergency Response AI (Concept Preview)",
+    description:
+      "Upcoming crash detection and alert concept currently open for product release updates.",
+    href: "/products/emergency-ai",
+  },
 ];
 
 export default function FamiliesPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
-          <Link to="/solutions" className="inline-flex items-center gap-2 text-muted-foreground hover:text-electric-cyan mb-8 transition-colors">
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-4xl">
+          <Link
+            to="/solutions"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Solutions
           </Link>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-electric-cyan/10 flex items-center justify-center">
-                <Users className="w-8 h-8 text-electric-cyan" />
-              </div>
-              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">For Families</h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Protect what matters most with family-focused safety features and teen driver monitoring.
-              </p>
+          <div className="mb-12">
+            <div className="w-12 h-12 mb-5 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Users className="w-6 h-6 text-primary" />
             </div>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              For Families
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl">
+              Practical driving feedback hardware for shared household vehicles.
+            </p>
+          </div>
 
-            <div className="grid gap-6">
-              {products.map((product) => (
-                <div key={product.name} className="bg-card rounded-2xl p-8 border border-border hover:border-electric-cyan/50 transition-all duration-300 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                  <div>
-                    <h3 className="text-xl font-heading font-semibold mb-2">{product.name}</h3>
-                    <p className="text-muted-foreground">{product.description}</p>
-                  </div>
-                  <Button variant="hero" asChild className="flex-shrink-0">
-                    <Link to={product.href}>
-                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
+          <div className="grid gap-5">
+            {items.map((item) => (
+              <div
+                key={item.name}
+                className="bg-card rounded-xl p-6 sm:p-8 border border-border flex flex-col md:flex-row md:items-center md:justify-between gap-5"
+              >
+                <div>
+                  <h2 className="text-xl font-heading font-semibold mb-2">
+                    {item.name}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
-              ))}
-            </div>
+                <Button variant="hero" asChild className="shrink-0 min-h-[44px]">
+                  <Link to={item.href}>
+                    View Option <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
       </main>

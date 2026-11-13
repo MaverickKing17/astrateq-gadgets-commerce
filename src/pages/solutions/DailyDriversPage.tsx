@@ -2,51 +2,68 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Car, Shield, AlertTriangle, ArrowRight } from "lucide-react";
+import { ArrowLeft, Car, ArrowRight } from "lucide-react";
 
-const products = [
-  { name: "Driver Coach AI", description: "Real-time AI coaching that improves driving habits and predicts maintenance needs.", href: "/products/driver-coach" },
-  { name: "Emergency Response System", description: "Automatic crash detection and instant emergency service notification.", href: "/products/emergency-ai" },
-  { name: "Complete Safety Bundles", description: "All-in-one packages combining our best safety products at a discount.", href: "/products" },
+const items = [
+  {
+    name: "ASTRA-AI Driver Coach System",
+    description:
+      "Compact windshield-mounted driving monitor and in-cabin coaching unit for everyday passenger vehicles.",
+    href: "/products/driver-coach",
+  },
+  {
+    name: "Compatibility Verification",
+    description:
+      "Confirm windshield clearance and 12V cabin interface with our support team before ordering.",
+    href: "/contact",
+  },
 ];
 
 export default function DailyDriversPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       <Header />
-      <main className="pt-48 pb-20">
-        <div className="container-wide">
-          <Link to="/solutions" className="inline-flex items-center gap-2 text-muted-foreground hover:text-electric-cyan mb-8 transition-colors">
+      <main className="pt-32 md:pt-40 pb-20">
+        <div className="container-wide max-w-4xl">
+          <Link
+            to="/solutions"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Solutions
           </Link>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-electric-cyan/10 flex items-center justify-center">
-                <Car className="w-8 h-8 text-electric-cyan" />
-              </div>
-              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">For Daily Drivers</h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                AI-powered safety for your everyday commute. Get predictive maintenance alerts, real-time coaching, and emergency response systems.
-              </p>
+          <div className="mb-12">
+            <div className="w-12 h-12 mb-5 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Car className="w-6 h-6 text-primary" />
             </div>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              For Daily Drivers
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl">
+              Practical in-cabin hardware for everyday commuting and driving awareness.
+            </p>
+          </div>
 
-            <div className="grid gap-6">
-              {products.map((product) => (
-                <div key={product.name} className="bg-card rounded-2xl p-8 border border-border hover:border-electric-cyan/50 transition-all duration-300 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                  <div>
-                    <h3 className="text-xl font-heading font-semibold mb-2">{product.name}</h3>
-                    <p className="text-muted-foreground">{product.description}</p>
-                  </div>
-                  <Button variant="hero" asChild className="flex-shrink-0">
-                    <Link to={product.href}>
-                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
+          <div className="grid gap-5">
+            {items.map((item) => (
+              <div
+                key={item.name}
+                className="bg-card rounded-xl p-6 sm:p-8 border border-border flex flex-col md:flex-row md:items-center md:justify-between gap-5"
+              >
+                <div>
+                  <h2 className="text-xl font-heading font-semibold mb-2">
+                    {item.name}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
-              ))}
-            </div>
+                <Button variant="hero" asChild className="shrink-0 min-h-[44px]">
+                  <Link to={item.href}>
+                    View Option <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
       </main>
