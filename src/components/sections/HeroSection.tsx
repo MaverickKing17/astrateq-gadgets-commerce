@@ -1,0 +1,8 @@
+import { ChevronDown, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import heroBg from "@/assets/hero-bg.jpg";
+
+export function HeroSection() {
+  return <section className="relative hero-dark overflow-hidden storefront-hero"><img src={heroBg} alt="View from inside a vehicle on an evening drive" width="1366" height="768" {...({ fetchpriority: "high" } as Record<string, string>)} className="absolute inset-0 w-full h-full object-cover" /><div className="absolute inset-0 storefront-hero-shade" /><div className="relative container-wide w-full pt-40 pb-16 md:pt-48 md:pb-24"><p className="text-electric-cyan text-sm font-semibold mb-5">ASTRATEQ GADGETS · AUTOMOTIVE TECHNOLOGY</p><h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight max-w-3xl mb-6">Drive With Absolute<br className="hidden sm:block" /> Confidence.</h1><p className="text-pure-white/90 text-lg sm:text-xl max-w-xl leading-relaxed mb-8">Automotive accessories and technology for your daily drive, your electric vehicle, and your fleet.</p><div className="flex flex-col sm:flex-row gap-3 max-w-lg"><Button size="lg" asChild><Link to="/products">Shop Now<ArrowRight /></Link></Button><Button variant="hero-ghost" size="lg" asChild><a href="#products">Explore Products</a></Button></div><div className="flex flex-wrap gap-x-6 gap-y-3 mt-10 text-sm text-pure-white/90"><Link to="/contact" className="hover:underline">Product & Compatibility Support</Link><Link to="/legal/shipping" className="hover:underline">Shipping Information</Link></div><a href="#products" aria-label="Scroll to products" className="inline-flex mt-10 text-electric-cyan"><ChevronDown size={24} /></a></div></section>;
+}

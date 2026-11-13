@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+
+/* Astrateq Gadgets Design System */
+@layer base {
+  :root {
+    /* Brand Colors */
+    --midnight-charcoal: 220 15% 11%;
+    --slate-grey: 210 10% 20%;
+    --electric-cyan: 187 100% 50%;
+    --pure-white: 0 0% 100%;
+    
+    /* Brand Accent */
+    --safety-ember: 43 100% 50%;
+    --safety-ember-hover: 45 100% 55%;
+    
+    /* Functional Colors */
+    --success-green: 162 100% 39%;
+    --warning-amber: 38 100% 56%;
+    --alert-red: 354 100% 64%;
+    
+    /* Neutral Backgrounds */
+    --grey-50: 0 0% 98%;
+    --grey-100: 0 0% 96%;
+    --grey-200: 0 0% 90%;
+    --grey-600: 0 0% 40%;
+    
+    /* Semantic Tokens */
+    --background: var(--grey-50);
+    --foreground: var(--midnight-charcoal);
+    
+    --card: var(--pure-white);
+    --card-foreground: var(--midnight-charcoal);
+    
+    --popover: var(--pure-white);
+    --popover-foreground: var(--midnight-charcoal);
+    
+    --primary: var(--electric-cyan);
+    --primary-foreground: var(--midnight-charcoal);
+    
+    --secondary: var(--slate-grey);
+    --secondary-foreground: var(--pure-white);
+    
+    --muted: var(--grey-100);
+    --muted-foreground: var(--grey-600);
+    
+    --accent: var(--electric-cyan);
+    --accent-foreground: var(--midnight-charcoal);
+    
+    --destructive: var(--alert-red);
+    --destructive-foreground: var(--pure-white);
+    
+    --success: var(--success-green);
+    --success-foreground: var(--pure-white);
+    
+    --warning: var(--warning-amber);
+    --warning-foreground: var(--midnight-charcoal);
+    
+    --border: var(--grey-200);
+    --input: var(--grey-200);
+    --ring: var(--electric-cyan);
+    
+    --radius: 0.75rem;
+    
+    /* Typography */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Sidebar (dark) */
+    --sidebar-background: var(--midnight-charcoal);
+    --sidebar-foreground: var(--pure-white);
+    --sidebar-primary: var(--electric-cyan);
+    --sidebar-primary-foreground: var(--midnight-charcoal);
+    --sidebar-accent: var(--slate-grey);
+    --sidebar-accent-foreground: var(--pure-white);
+    --sidebar-border: var(--slate-grey);
+    --sidebar-ring: var(--electric-cyan);
+  }
+
+  .dark {
+    --background: var(--midnight-charcoal);
+    --foreground: var(--pure-white);
+    
+    --card: var(--slate-grey);
+    --card-foreground: var(--pure-white);
+    
+    --popover: var(--slate-grey);
+    --popover-foreground: var(--pure-white);
+    
+    --primary: var(--electric-cyan);
+    --primary-foreground: var(--midnight-charcoal);
+    
+    --secondary: var(--grey-100);
+    --secondary-foreground: var(--midnight-charcoal);
+    
+    --muted: var(--slate-grey);
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: var(--electric-cyan);
+    --accent-foreground: var(--midnight-charcoal);
+    
+    --border: var(--slate-grey);
+    --input: var(--slate-grey);
+    --ring: var(--electric-cyan);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-background/80 backdrop-blur-lg border border-border/50;
+  }
+  
+  .glass-dark {
+    @apply bg-midnight-charcoal/80 backdrop-blur-lg border border-slate-grey/50;
+  }
+  
+  /* Gradient text - dark backgrounds */
+  .gradient-text {
+    @apply bg-gradient-to-r from-pure-white to-electric-cyan bg-clip-text text-transparent;
+  }
+
+  /* Gradient text - light backgrounds */
+  .gradient-text-light {
+    @apply bg-gradient-to-r from-midnight-charcoal to-electric-cyan bg-clip-text text-transparent;
+  }
+  
+  /* Cyan glow effect */
+  .glow-cyan {
+    box-shadow: 0 0 30px hsl(var(--electric-cyan) / 0.3);
+  }
+  
+  .glow-cyan-intense {
+    box-shadow: 0 0 50px hsl(var(--electric-cyan) / 0.5);
+  }
+  
+  /* Premium card styling */
+  .premium-card {
+    @apply bg-card rounded-xl border border-border/50 shadow-lg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-out;
+  }
+  
+  .premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Dark hero section */
+  .hero-dark {
+    @apply bg-midnight-charcoal text-pure-white;
+  }
+  
+  /* Section spacing */
+  .section-padding {
+    @apply py-20 lg:py-28;
+  }
+  
+  /* Container max width */
+  .container-narrow {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  /* Animation delays */
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-500 { animation-delay: 500ms; }
+  
+  /* Subtle Cyber Grid Background - Dark */
+  .cyber-grid-dark {
+    background-color: hsl(var(--midnight-charcoal));
+    background-image: 
+      linear-gradient(rgba(0, 208, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 208, 255, 0.03) 1px, transparent 1px),
+      radial-gradient(ellipse at 50% 50%, rgba(0, 208, 255, 0.05) 0%, transparent 70%);
+    background-size: 40px 40px, 40px 40px, 100% 100%;
+  }
+  
+  /* Subtle Data Mesh Background - Light */
+  .data-mesh-light {
+    background-color: hsl(var(--grey-50));
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      radial-gradient(ellipse at 30% 70%, rgba(0, 208, 255, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 30%, rgba(0, 208, 255, 0.03) 0%, transparent 50%);
+    background-size: 60px 60px, 60px 60px, 100% 100%, 100% 100%;
+  }
+  
+  /* Hexagonal Tech Pattern - Premium Dark */
+  .hex-tech-dark {
+    background-color: hsl(var(--slate-grey));
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(0, 208, 255, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 75% 75%, rgba(0, 208, 255, 0.05) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+  }
+}
