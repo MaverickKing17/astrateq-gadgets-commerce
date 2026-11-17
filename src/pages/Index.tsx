@@ -1,10 +1,11 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { HeroCompatibilityBar } from "@/components/compatibility/HeroCompatibilityBar";
 import { DifferenceSection } from "@/components/sections/DifferenceSection";
 import { ProductsSection } from "@/components/sections/ProductsSection";
 import { StatsSection } from "@/components/sections/StatsSection";
-import { ProductFinderCTA } from "@/components/sections/ProductFinderCTA";
+import { CatalogueAssistantSection } from "@/components/sections/CatalogueAssistantSection";
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 
@@ -17,10 +18,11 @@ const Index = () => {
       <Header />
       <main id="main-content">
         <HeroSection />
+        <HeroCompatibilityBar />
         <ProductsSection />
         <DifferenceSection />
         <StatsSection />
-        <ProductFinderCTA />
+        <CatalogueAssistantSection />
         <HowItWorksSection />
         <NewsletterSection />
       </main>

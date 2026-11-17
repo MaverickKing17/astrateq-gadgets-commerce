@@ -145,6 +145,17 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={() =>
+                    window.dispatchEvent(new CustomEvent("astrateq:open-assistant"))
+                  }
+                  className="text-pure-white/80 hover:text-electric-cyan text-sm font-body transition-colors inline-block py-0.5 text-left"
+                >
+                  Catalogue Assistant
+                </button>
+              </li>
             </ul>
           </div>
 

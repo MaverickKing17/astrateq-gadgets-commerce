@@ -11,6 +11,9 @@ import {
   Wrench,
   Wifi,
   Package,
+  ShieldCheck,
+  Truck,
+  HelpCircle,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -22,10 +25,264 @@ import {
   products,
   formatPrice,
   availabilityStatusMeta,
+  type Product,
 } from "@/lib/catalogue";
 import { useCart } from "@/contexts/CartContext";
 import { useCompare } from "@/contexts/CompareContext";
 import { storeConfig } from "@/config/store";
+
+type DetailTabId = "specs" | "installation" | "warranty" | "shipping" | "faqs";
+
+const DETAIL_TABS: Array<{ id: DetailTabId; label: string }> = [
+  { id: "specs", label: "Specifications" },
+  { id: "installation", label: "Installation" },
+  { id: "warranty", label: "Warranty & Returns" },
+  { id: "shipping", label: "Shipping" },
+  { id: "faqs", label: "FAQs" },
+];
+
+function ProductDetailTabs({ product }: { product: Product }) {
+  const [activeTab, setActiveTab] = useState<DetailTabId>("specs");
+
+  return (
+    <section
+      aria-label="Product technical details and policies"
+      className="mt-14 rounded-xl border border-border bg-card/50 overflow-hidden"
+    >
+      <div
+        role="tablist"
+        aria-label="Product details"
+        className="flex overflow-x-auto border-b border-border bg-midnight-charcoal/60"
+      >
+        {DETAIL_TABS.map((tab) => {
+          const isSelected = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              id={`tab-${tab.id}`}
+              role="tab"
+              type="button"
+              aria-selected={isSelected}
+              aria-controls={`tabpanel-${tab.id}`}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-5 py-3.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                isSelected
+                  ? "border-primary text-foreground bg-card"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="p-6 lg:p-8">
+        {activeTab === "specs" && (
+          <div
+            id="tabpanel-specs"
+            role="tabpanel"
+            aria-labelledby="tab-specs"
+            className="space-y-6"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-lg font-heading font-semibold text-foreground">
+                Technical Specifications
+              </h2>
+              <span className="text-xs text-muted-foreground">
+                Unsupplied fields are marked explicitly
+              </span>
+            </div>
+
+            <div className="rounded-xl border border-border overflow-hidden">
+              <dl className="divide-y divide-border text-sm">
+                {product.specifications.map((spec) => (
+                  <div
+                    key={spec.label}
+                    className="grid sm:grid-cols-[220px_1fr] gap-2 p-3.5 bg-background/50"
+                  >
+                    <dt className="font-medium text-muted-foreground">
+                      {spec.label}
+                    </dt>
+                    <dd
+                      className={
+                        spec.confirmed
+                          ? "text-foreground"
+                          : "text-muted-foreground italic"
+                      }
+                    >
+                      {spec.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-border bg-background/40 p-4 flex items-start gap-3">
+                <Wifi className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-semibold mb-1">
+                    Connectivity &amp; Subscriptions
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {product.connectivityAndSubscription}
+                  </p>
+                </div>
+              </div>
+              <div className="rounded-xl border border-border bg-background/40 p-4 flex items-start gap-3">
+                <Package className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-semibold mb-1">
+                    Included Accessories &amp; Packaging
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {product.includedAccessories}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "installation" && (
+          <div
+            id="tabpanel-installation"
+            role="tabpanel"
+            aria-labelledby="tab-installation"
+            className="max-w-3xl space-y-4"
+          >
+            <div className="flex items-start gap-3">
+              <Wrench className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <h2 className="text-lg font-heading font-semibold text-foreground">
+                  Installation Requirements
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {product.installationRequirements}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 pt-2 text-sm">
+              <a
+                href="#compatibility-finder"
+                className="text-primary font-medium hover:underline"
+              >
+                Check Vehicle Compatibility Below →
+              </a>
+              <Link
+                to="/support/installation"
+                className="text-foreground/85 hover:text-primary transition-colors"
+              >
+                Installation Guide
+              </Link>
+              <Link
+                to="/contact"
+                className="text-foreground/85 hover:text-primary transition-colors"
+              >
+                Ask Technical Support
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "warranty" && (
+          <div
+            id="tabpanel-warranty"
+            role="tabpanel"
+            aria-labelledby="tab-warranty"
+            className="max-w-3xl space-y-4"
+          >
+            <div className="flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <h2 className="text-lg font-heading font-semibold text-foreground">
+                  Written Warranty &amp; Returns
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {storeConfig.policies.warrantySummary} {storeConfig.policies.returnsSummary}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 pt-2 text-sm text-primary">
+              <Link to="/support/warranty" className="hover:underline">
+                Warranty Policy
+              </Link>
+              <Link to="/legal/refund" className="hover:underline">
+                Returns &amp; Refunds
+              </Link>
+              <Link to="/contact" className="hover:underline">
+                Contact Support
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "shipping" && (
+          <div
+            id="tabpanel-shipping"
+            role="tabpanel"
+            aria-labelledby="tab-shipping"
+            className="max-w-3xl space-y-4"
+          >
+            <div className="flex items-start gap-3">
+              <Truck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <h2 className="text-lg font-heading font-semibold text-foreground">
+                  Shipping &amp; Availability Confirmation
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {storeConfig.policies.shippingSummary} {product.availabilityDetail}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 pt-2 text-sm text-primary">
+              <Link to="/legal/shipping" className="hover:underline">
+                Shipping Policy
+              </Link>
+              <Link to="/contact" className="hover:underline">
+                Confirm Regional Delivery
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "faqs" && (
+          <div
+            id="tabpanel-faqs"
+            role="tabpanel"
+            aria-labelledby="tab-faqs"
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-primary shrink-0" />
+              <h2 className="text-lg font-heading font-semibold text-foreground">
+                Frequently Asked Questions
+              </h2>
+            </div>
+            <div className="divide-y divide-border border-y border-border">
+              {product.faqs.map((faq) => (
+                <div key={faq.question} className="py-4">
+                  <h3 className="text-sm font-semibold text-foreground mb-1.5">
+                    {faq.question}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="pt-1 text-sm">
+              <Link to="/contact" className="text-primary hover:underline">
+                Have another question? Contact Support →
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 export function ProductDetail({ id }: { id: string }) {
   const [quantity, setQuantity] = useState(1);
@@ -186,7 +443,7 @@ export function ProductDetail({ id }: { id: string }) {
                 Online payment processing is currently disabled. Adding items to your cart prepares an itemized order inquiry without charging you.
               </p>
 
-              <div className="mb-8">
+              <div>
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   Key Highlights
                 </h2>
@@ -202,115 +459,14 @@ export function ProductDetail({ id }: { id: string }) {
                   ))}
                 </ul>
               </div>
-
-              {/* Technical Specifications Table */}
-              <div className="mb-8">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                  Technical Specifications
-                </h2>
-                <div className="rounded-xl border border-border overflow-hidden">
-                  <dl className="divide-y divide-border text-sm">
-                    {product.specifications.map((spec) => (
-                      <div
-                        key={spec.label}
-                        className="grid sm:grid-cols-[200px_1fr] gap-2 p-3.5 bg-card/50"
-                      >
-                        <dt className="font-medium text-muted-foreground">
-                          {spec.label}
-                        </dt>
-                        <dd
-                          className={
-                            spec.confirmed
-                              ? "text-foreground"
-                              : "text-muted-foreground italic"
-                          }
-                        >
-                          {spec.value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-
-              {/* Installation, Connectivity & Accessories */}
-              <div className="space-y-4 mb-8">
-                <div className="rounded-xl border border-border bg-card/40 p-4 flex items-start gap-3">
-                  <Wrench className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-sm font-semibold mb-1">
-                      Installation Requirements
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {product.installationRequirements}
-                    </p>
-                  </div>
-                </div>
-                <div className="rounded-xl border border-border bg-card/40 p-4 flex items-start gap-3">
-                  <Wifi className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-sm font-semibold mb-1">
-                      Connectivity & Subscriptions
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {product.connectivityAndSubscription}
-                    </p>
-                  </div>
-                </div>
-                <div className="rounded-xl border border-border bg-card/40 p-4 flex items-start gap-3">
-                  <Package className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-sm font-semibold mb-1">
-                      Included Accessories & Packaging
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {product.includedAccessories}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Shipping, Warranty & FAQs */}
-              <div className="divide-y divide-border border-y border-border">
-                <details open className="py-4">
-                  <summary className="font-semibold cursor-pointer text-sm">
-                    Shipping, Returns & Warranty
-                  </summary>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                    {storeConfig.policies.shippingSummary} {storeConfig.policies.returnsSummary} {storeConfig.policies.warrantySummary}
-                  </p>
-                  <div className="flex flex-wrap gap-4 mt-3 text-sm text-primary">
-                    <Link to="/legal/shipping" className="hover:underline">
-                      Shipping Policy
-                    </Link>
-                    <Link to="/legal/refund" className="hover:underline">
-                      Returns & Refunds
-                    </Link>
-                    <Link to="/support/warranty" className="hover:underline">
-                      Warranty Policy
-                    </Link>
-                    <Link to="/contact" className="hover:underline">
-                      Contact Support
-                    </Link>
-                  </div>
-                </details>
-
-                {product.faqs.map((faq) => (
-                  <details key={faq.question} className="py-4">
-                    <summary className="font-semibold cursor-pointer text-sm">
-                      {faq.question}
-                    </summary>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </details>
-                ))}
-              </div>
             </div>
           </div>
 
+          {/* Tabbed Specifications, Installation, Warranty, Shipping & FAQs */}
+          <ProductDetailTabs product={product} />
+
           {/* Embedded Vehicle Compatibility Finder */}
-          <div className="mt-16">
+          <div id="compatibility-finder" className="mt-14 scroll-mt-32">
             <VehicleCompatibilityFinder lockedProductId={product.id} compact />
           </div>
 

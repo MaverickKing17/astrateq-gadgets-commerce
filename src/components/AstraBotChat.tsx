@@ -144,12 +144,27 @@ export function AstraBotChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasGreeted, setHasGreeted] = useState(false);
   const [lastFailedMsg, setLastFailedMsg] = useState<string | null>(null);
+  const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const handleOpenEvent = (event: Event) => {
+      const custom = event as CustomEvent<{ prompt?: string }>;
+      setIsOpen(true);
+      if (custom.detail?.prompt) {
+        setPendingPrompt(custom.detail.prompt);
+      }
+    };
+    window.addEventListener("astrateq:open-assistant", handleOpenEvent);
+    return () => {
+      window.removeEventListener("astrateq:open-assistant", handleOpenEvent);
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen && IS_AI_CONFIGURED && !hasGreeted) {
@@ -221,6 +236,14 @@ export function AstraBotChat() {
     [messages, isLoading]
   );
 
+  useEffect(() => {
+    if (isOpen && IS_AI_CONFIGURED && hasGreeted && pendingPrompt && !isLoading) {
+      const next = pendingPrompt;
+      setPendingPrompt(null);
+      sendMessage(next);
+    }
+  }, [isOpen, hasGreeted, pendingPrompt, isLoading, sendMessage]);
+
   return (
     <>
       <AnimatePresence>
@@ -230,7 +253,7 @@ export function AstraBotChat() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-[60] h-14 px-4 rounded-full bg-electric-cyan text-midnight-charcoal shadow-xl border border-midnight-charcoal/20 flex items-center gap-2 hover:bg-electric-cyan/90 transition-colors font-semibold text-sm"
+            className="hidden md:flex fixed bottom-6 right-6 z-[60] h-12 px-4 rounded-full bg-electric-cyan text-midnight-charcoal shadow-xl border border-midnight-charcoal/20 items-center gap-2 hover:bg-electric-cyan/90 transition-colors font-semibold text-sm"
             aria-label={
               IS_AI_CONFIGURED
                 ? "Open AI Shopping Assistant"
@@ -238,9 +261,7 @@ export function AstraBotChat() {
             }
           >
             <Bot className="w-5 h-5" />
-            <span className="hidden sm:inline">
-              {IS_AI_CONFIGURED ? "Product Assistant" : "Shopping Help"}
-            </span>
+            <span>{IS_AI_CONFIGURED ? "Product Assistant" : "Shopping Help"}</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -254,7 +275,7 @@ export function AstraBotChat() {
             transition={{ duration: 0.2 }}
             role="dialog"
             aria-label="Astrateq Product Assistant"
-            className="dark fixed bottom-6 right-6 z-[60] w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-4rem)] rounded-2xl overflow-hidden shadow-2xl border border-border flex flex-col bg-card text-foreground"
+            className="dark fixed inset-x-3 bottom-3 md:inset-auto md:bottom-6 md:right-6 z-[60] md:w-[390px] h-[min(520px,calc(100vh-4rem))] rounded-2xl overflow-hidden shadow-2xl border border-border flex flex-col bg-card text-foreground"
           >
             <div className="bg-midnight-charcoal border-b border-border px-4 py-3 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
@@ -337,14 +358,29 @@ export function AstraBotChat() {
                     <ArrowRight className="w-4 h-4 text-primary" />
                   </Link>
                   <Link
-                    to="/contact"
+                    to={
+                      pendingPrompt
+                        ? `/contact?subject=${encodeURIComponent(pendingPrompt)}`
+                        : "/contact"
+                    }
                     onClick={() => setIsOpen(false)}
                     className="flex items-center justify-between p-3 rounded-lg border border-border bg-background hover:border-primary/50 text-sm font-medium transition-colors"
                   >
-                    <span>Contact Support Team</span>
+                    <span>
+                      {pendingPrompt
+                        ? "Send This Question to Support"
+                        : "Contact Support Team"}
+                    </span>
                     <ArrowRight className="w-4 h-4 text-primary" />
                   </Link>
                 </div>
+
+                {pendingPrompt && (
+                  <p className="text-xs text-muted-foreground pt-1">
+                    Selected question:{" "}
+                    <span className="text-foreground">&ldquo;{pendingPrompt}&rdquo;</span>
+                  </p>
+                )}
               </div>
             ) : (
               <>
