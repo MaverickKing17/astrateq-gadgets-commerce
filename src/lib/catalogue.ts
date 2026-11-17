@@ -1,6 +1,6 @@
-import driverImage from "@/assets/images/product_driver_coach_studio_1794602182991.jpg";
-import fleetImage from "@/assets/images/product_fleet_guard_studio_1794602183915.jpg";
-import evImage from "@/assets/images/product_ev_suite_studio_1794602184501.jpg";
+import driverImage from "@/assets/images/driver_coach_apple_studio_1794946823668.jpg";
+import fleetImage from "@/assets/images/fleet_guard_studio_clean_1794946839888.jpg";
+import evImage from "@/assets/images/ev_suite_apple_studio_1794946824849.jpg";
 import cockpitImage from "@/assets/images/hero_automotive_cockpit_1794602183463.jpg";
 
 export type ProductCategory =
@@ -80,11 +80,11 @@ export const products: Product[] = [
       "Designed for daily drivers and households seeking clearer trip awareness and structured driving feedback. Connects cleanly inside the cabin without altering factory dashboard controls.",
     image: driverImage,
     imageAlt:
-      "ASTRA-AI Driver Coach System cylindrical matte-black dashcam hardware unit on dark slate",
+      "ASTRA-AI Driver Coach System matte bead-blasted aluminum dashcam hardware on a seamless satin obsidian studio sweep",
     gallery: [
       {
         src: driverImage,
-        alt: "ASTRA-AI Driver Coach System cylindrical matte-black dashcam hardware unit on dark slate",
+        alt: "ASTRA-AI Driver Coach System matte bead-blasted aluminum dashcam hardware on a seamless satin obsidian studio sweep",
         caption: "Hardware unit — studio front view",
       },
       {
@@ -193,11 +193,11 @@ export const products: Product[] = [
       "Engineered for commercial operators looking to centralize vehicle health tracking, driver coaching workflows, and scheduled maintenance planning across multi-vehicle fleets.",
     image: fleetImage,
     imageAlt:
-      "FleetGuard AI Pro rugged matte-black OBD-II telematics hardware module with cooling fins on dark slate",
+      "FleetGuard AI Pro CNC-machined matte black anodized telematics module with cyan indicator bar on a seamless dark studio sweep",
     gallery: [
       {
         src: fleetImage,
-        alt: "FleetGuard AI Pro rugged matte-black OBD-II telematics hardware module with cooling fins on dark slate",
+        alt: "FleetGuard AI Pro CNC-machined matte black anodized telematics module with cyan indicator bar on a seamless dark studio sweep",
         caption: "Hardware unit — studio product view",
       },
     ],
@@ -301,11 +301,11 @@ export const products: Product[] = [
       "Built for EV owners who want transparent visibility into charging behavior, battery pack diagnostics, and day-to-day state-of-charge tracking in one dedicated hardware unit.",
     image: evImage,
     imageAlt:
-      "EV Battery Intelligence Suite brushed aluminum and smoked-glass battery monitor module on dark slate",
+      "EV Battery Intelligence Suite chamfered brushed aluminum and smoked-glass battery monitor module on a seamless dark studio sweep",
     gallery: [
       {
         src: evImage,
-        alt: "EV Battery Intelligence Suite brushed aluminum and smoked-glass battery monitor module on dark slate",
+        alt: "EV Battery Intelligence Suite chamfered brushed aluminum and smoked-glass battery monitor module on a seamless dark studio sweep",
         caption: "Hardware unit — studio product view",
       },
     ],
