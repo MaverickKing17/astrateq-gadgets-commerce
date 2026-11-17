@@ -1,38 +1,61 @@
 import { Link } from "react-router-dom";
-import { ShieldCheck, FileText, Headphones, Truck } from "lucide-react";
+import {
+  ShieldCheck,
+  FileText,
+  Headphones,
+  Truck,
+  RotateCcw,
+  Lock,
+} from "lucide-react";
 
-const commitments = [
-  {
-    icon: Headphones,
-    title: "Pre-Order Fitment Guidance",
-    description:
-      "Confirm make, model year, and OBD-II or power interface compatibility directly with our Toronto support team before placing an order.",
-    linkLabel: "Contact Support",
-    href: "/contact",
-  },
+const trustPolicies = [
   {
     icon: Truck,
-    title: "Transparent Shipping Terms",
+    title: "Shipping Policy",
     description:
-      "Carrier options, delivery windows, and applicable taxes or duties are disclosed clearly before any order is finalized.",
-    linkLabel: "Shipping Policy",
+      "Carrier options, delivery timelines, and applicable regional rates are confirmed in writing prior to order acceptance.",
+    linkLabel: "Read Shipping Policy",
     href: "/legal/shipping",
   },
   {
-    icon: FileText,
-    title: "Written Warranty & Returns",
+    icon: RotateCcw,
+    title: "Returns Policy",
     description:
-      "Clear written warranty terms and straightforward return procedures aligned with Canadian consumer protection standards.",
-    linkLabel: "Warranty & Returns",
+      "Clear return authorization and refund procedures aligned with Canadian consumer protection standards.",
+    linkLabel: "Read Returns Policy",
+    href: "/legal/refund",
+  },
+  {
+    icon: FileText,
+    title: "Warranty Policy",
+    description:
+      "Written hardware warranty and support documentation is provided prior to order confirmation.",
+    linkLabel: "Read Warranty Policy",
     href: "/support/warranty",
   },
   {
-    icon: ShieldCheck,
-    title: "Honest Order Readiness",
+    icon: Lock,
+    title: "Privacy Policy",
     description:
-      "Online card checkout is not active until payment processing is finalized, so adding items to your cart never triggers an unexpected charge.",
-    linkLabel: "Review Terms",
+      "PIPEDA-aligned handling of customer inquiries, browser cart storage, and consent-based site analytics.",
+    linkLabel: "Read Privacy Policy",
+    href: "/legal/privacy",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Terms & Conditions",
+    description:
+      "Transparent terms covering CAD pricing, pre-order fitment verification, and unconfigured online card checkout.",
+    linkLabel: "Read Terms & Conditions",
     href: "/legal/terms",
+  },
+  {
+    icon: Headphones,
+    title: "Customer Support",
+    description:
+      "Reach our Toronto support team directly for vehicle compatibility verification, fleet quotes, and hardware questions.",
+    linkLabel: "Contact Support",
+    href: "/contact",
   },
 ];
 
@@ -45,15 +68,15 @@ export function StatsSection() {
             Customer Trust & Transparency
           </p>
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-            Built on Clear Commitments, Not Inflated Claims
+            Clear Policies & Pre-Order Confidence
           </h2>
           <p className="text-pure-white/75 text-base leading-relaxed">
-            Every vehicle setup is different. We prioritize straightforward product details, direct compatibility verification, and transparent storefront policies.
+            Every vehicle setup is different. Review our published policies, availability status, and support channels before placing an order inquiry.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {commitments.map((item) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {trustPolicies.map((item) => (
             <div
               key={item.title}
               className="rounded-xl border border-slate-grey bg-slate-grey/40 p-6 flex flex-col"

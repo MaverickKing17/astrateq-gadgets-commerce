@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,33 @@ import { trackGenerateLead } from "@/lib/analytics";
 import { storeConfig } from "@/config/store";
 
 export default function ContactPage() {
+  const [searchParams] = useSearchParams();
+  const initialSubject = searchParams.get("subject") ?? "";
+  const initialVehicle = searchParams.get("vehicle") ?? "";
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
-    message: "",
+    subject: initialSubject,
+    message: initialVehicle
+      ? `Vehicle: ${initialVehicle}\n\nPlease confirm compatibility, availability, and shipping details.`
+      : "",
   });
+
+  useEffect(() => {
+    if (initialSubject || initialVehicle) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: prev.subject || initialSubject,
+        message:
+          prev.message ||
+          (initialVehicle
+            ? `Vehicle: ${initialVehicle}\n\nPlease confirm compatibility, availability, and shipping details.`
+            : ""),
+      }));
+    }
+  }, [initialSubject, initialVehicle]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{
     type: "idle" | "error" | "unconfigured" | "success";
@@ -39,7 +60,7 @@ export default function ContactPage() {
       return;
     }
 
-    const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT;
+    const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT?.trim();
     if (!endpoint) {
       setStatus({
         type: "unconfigured",

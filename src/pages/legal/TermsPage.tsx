@@ -44,7 +44,7 @@ export default function TermsPage() {
                 3. Pricing, Availability & Orders
               </h2>
               <p>
-                Displayed prices are listed in USD unless otherwise noted. Online payment processing is not currently active on this storefront; adding items to your cart prepares an inquiry summary. Final pricing, applicable taxes, shipping charges, and vehicle compatibility are confirmed in writing prior to order acceptance.
+                Displayed prices are listed in CAD unless otherwise noted. Online payment processing is not currently active on this storefront; adding items to your cart prepares an inquiry summary. Final pricing, applicable taxes, shipping charges, and vehicle compatibility are confirmed in writing prior to order acceptance.
               </p>
             </section>
 

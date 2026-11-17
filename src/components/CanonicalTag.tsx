@@ -38,6 +38,11 @@ const routeMeta: Record<string, { title: string; description: string }> = {
     description:
       "Find automotive hardware tailored for daily drivers, EV owners, families, and fleet managers.",
   },
+  "/resources/compare": {
+    title: `Compare Hardware | ${storeConfig.brandName}`,
+    description:
+      "Compare CAD pricing, availability, installation requirements, and compatibility guidance across Astrateq hardware.",
+  },
   "/cart": {
     title: `Shopping Cart | ${storeConfig.brandName}`,
     description: "Review items in your shopping cart and proceed to checkout.",

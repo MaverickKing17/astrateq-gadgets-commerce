@@ -63,7 +63,7 @@ export function ProductsSection() {
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 pt-6 border-t border-border/70 text-sm">
           <p className="text-muted-foreground">
-            Prices shown in USD. Vehicle compatibility and shipping options are confirmed prior to order acceptance.
+            Prices shown in CAD. Vehicle compatibility and shipping options are confirmed prior to order acceptance.
           </p>
           <Link
             to="/products"

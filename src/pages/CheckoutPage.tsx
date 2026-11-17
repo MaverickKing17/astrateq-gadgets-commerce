@@ -20,7 +20,7 @@ export default function CheckoutPage() {
     .map((item) => {
       const product = products.find((p) => p.id === item.id);
       if (!product) return null;
-      return `- ${product.name} × ${item.quantity} (${formatPrice(product.price * item.quantity)} USD)`;
+      return `- ${product.name} × ${item.quantity} (${formatPrice(product.price * item.quantity)} CAD)`;
     })
     .filter(Boolean)
     .join("\n");
@@ -44,7 +44,7 @@ export default function CheckoutPage() {
       vehicleInfo || "N/A"
     }\n\nSelected Items:\n${summaryLines || "No items selected"}\n\nEstimated Subtotal: ${formatPrice(
       subtotal
-    )} USD\n\nNotes:\n${notes || "None"}`
+    )} CAD\n\nNotes:\n${notes || "None"}`
   )}`;
 
   return (
@@ -196,7 +196,7 @@ export default function CheckoutPage() {
 
                   <div className="border-t border-border pt-4 flex justify-between font-semibold">
                     <span>Estimated Subtotal</span>
-                    <span className="tabular-nums">{formatPrice(subtotal)} USD</span>
+                    <span className="tabular-nums">{formatPrice(subtotal)} CAD</span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Final shipping charges and applicable taxes are calculated once carrier and compatibility are confirmed.

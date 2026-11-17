@@ -26,7 +26,7 @@ export function NewsletterSection() {
       return;
     }
 
-    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT;
+    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT?.trim();
     if (!endpoint) {
       setFeedback({
         type: "unconfigured",

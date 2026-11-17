@@ -74,7 +74,7 @@ export function Footer() {
       return;
     }
 
-    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT;
+    const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT?.trim();
     if (!endpoint) {
       setStatus({
         type: "unconfigured",

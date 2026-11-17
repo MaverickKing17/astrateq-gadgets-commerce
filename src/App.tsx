@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AstraBotChat } from "@/components/AstraBotChat";
 import { CartProvider } from "@/contexts/CartContext";
+import { CompareProvider } from "@/contexts/CompareContext";
 import CheckoutPage from "./pages/CheckoutPage";
 import { CanonicalTag } from "@/components/CanonicalTag";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -135,7 +136,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <CanonicalTag />
-        <CartProvider><AnimatedRoutes /></CartProvider>
+        <CartProvider>
+          <CompareProvider>
+            <AnimatedRoutes />
+          </CompareProvider>
+        </CartProvider>
         <AstraBotChat />
         <CookieConsent />
         <Analytics />

@@ -22,7 +22,7 @@ export const storeConfig = {
     { label: "YouTube", href: "https://youtube.com/@astrateq" },
   ],
   policies: {
-    currency: "USD" as const,
+    currency: "CAD" as const,
     checkoutEnabled: false,
     shippingSummary:
       "Shipping rates, carrier options, and delivery timelines are confirmed with you prior to order acceptance.",

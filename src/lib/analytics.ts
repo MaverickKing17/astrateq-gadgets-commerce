@@ -12,7 +12,7 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>) 
 
 export function trackAddToCart(productName: string, price: string) {
   trackEvent('add_to_cart', {
-    currency: 'USD',
+    currency: 'CAD',
     value: parseFloat(price.replace(/[^0-9.]/g, '')),
     items: [{ item_name: productName }],
   });
@@ -20,7 +20,7 @@ export function trackAddToCart(productName: string, price: string) {
 
 export function trackGenerateLead() {
   trackEvent('generate_lead', {
-    currency: 'USD',
+    currency: 'CAD',
     value: 0,
   });
 }

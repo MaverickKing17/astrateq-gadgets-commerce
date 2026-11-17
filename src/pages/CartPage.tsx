@@ -99,7 +99,7 @@ export default function CartPage() {
                 <div className="flex justify-between mb-3 text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-semibold tabular-nums" aria-label="Cart subtotal">
-                    {formatPrice(subtotal)} USD
+                    {formatPrice(subtotal)} CAD
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mb-6 leading-relaxed">

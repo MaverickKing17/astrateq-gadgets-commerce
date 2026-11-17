@@ -22,7 +22,7 @@ const pillars = [
     icon: ShieldCheck,
     title: "Transparent Storefront",
     description:
-      "Honest product descriptions, clear USD pricing, and direct pre-order fitment verification before any payment is processed.",
+      "Honest product descriptions, clear CAD pricing, and direct pre-order fitment verification before any payment is processed.",
   },
   {
     icon: Mail,
